@@ -5,86 +5,301 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shokaimono - Links & Reviews</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; color: #333; margin: 0; padding: 20px; text-align: center; }
-        .container { max-width: 480px; margin: auto; }
-        .avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        h1 { font-size: 24px; margin: 0 0 5px 0; color: #222; }
-        h2 { font-size: 16px; color: #666; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        
-        /* Nút chung */
-        a.btn { display: block; text-decoration: none; padding: 14px; margin-bottom: 12px; border-radius: 8px; font-weight: bold; transition: all 0.2s; }
-        
-        /* Nút Mạng Xã Hội */
-        .btn-social { background-color: #fff; color: #333; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .btn-social:hover { background-color: #f0f0f0; border-color: #ccc; }
+        /* Tông màu Hoa Anh Đào Pastel */
+        :root {
+            --sakura-light: #ffe6eb;
+            --sakura-main: #ffb7c5;
+            --sakura-dark: #e88fa1;
+            --text-main: #5a4b50;
+            --white-glass: rgba(255, 255, 255, 0.7);
+        }
 
-        /* Nút File Tài liệu */
-        .btn-file { background-color: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1; }
-        .btn-file:hover { background-color: #cbd5e1; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #fdfbfb 0%, var(--sakura-light) 100%);
+            background-attachment: fixed;
+            color: var(--text-main); 
+            margin: 0; 
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Header chứa Menu và Đồng hồ */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: var(--sakura-dark);
+            transition: 0.2s;
+        }
+        .menu-btn:hover { color: #d66c82; }
+
+        .datetime-box {
+            text-align: right;
+        }
+        .time-text { font-size: 18px; font-weight: bold; color: var(--sakura-dark); }
+        .date-text { font-size: 12px; color: #7a6a6f; margin-top: 2px; }
+
+        /* Sidebar (Menu trượt) */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background: rgba(255, 246, 248, 0.95);
+            backdrop-filter: blur(15px);
+            overflow-x: hidden;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            padding-top: 60px;
+            white-space: nowrap;
+        }
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            color: var(--text-main);
+            display: block;
+            font-weight: bold;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: var(--sakura-dark);
+            background: rgba(255, 183, 197, 0.2);
+            border-left: 4px solid var(--sakura-main);
+        }
+        .sidebar .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            border-left: none;
+            background: transparent;
+        }
+
+        /* Vùng nội dung chính */
+        .container { 
+            max-width: 480px; 
+            margin: auto; 
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .avatar { 
+            width: 110px; height: 110px; 
+            border-radius: 50%; 
+            border: 4px solid #fff; 
+            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.5); 
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        h1 { font-size: 26px; margin: 0 0 5px 0; color: var(--sakura-dark); }
+        .bio-description { font-size: 14px; color: #887a7f; margin-bottom: 25px; }
+
+        /* Xử lý hiển thị Tab */
+        .tab-content { 
+            display: none; 
+            animation: fadeIn 0.4s ease; 
+        }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 { 
+            font-size: 16px; color: #887a7f; margin: 0 0 15px 0; 
+            text-transform: uppercase; letter-spacing: 2px; 
+        }
+
+        /* Nút bấm chung */
+        a.btn { 
+            display: block; text-decoration: none; padding: 15px; margin-bottom: 12px; 
+            border-radius: 12px; font-weight: bold; transition: all 0.3s;
+            background: var(--white-glass);
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            position: relative;
+            overflow: hidden;
+        }
+        a.btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 183, 197, 0.3);
+            border-color: var(--sakura-main);
+            background: #fff;
+        }
 
         /* Card Review Sản phẩm */
-        .review-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border-left: 4px solid #d4af37; }
-        .review-title { font-size: 16px; font-weight: bold; color: #222; margin: 0 0 8px 0; line-height: 1.4; }
-        .review-content { font-size: 14px; color: #555; white-space: pre-line; line-height: 1.6; margin-bottom: 15px; }
-        .btn-shopee { background-color: #ff5722; color: #fff; text-align: center; padding: 12px; border-radius: 6px; }
-        .btn-shopee:hover { background-color: #e64a19; }
+        .review-card { 
+            background: var(--white-glass); 
+            border-radius: 16px; padding: 20px; margin-bottom: 20px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+            text-align: left; 
+            border-top: 4px solid var(--sakura-main);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .review-title { font-size: 17px; font-weight: bold; color: var(--sakura-dark); margin: 0 0 10px 0; line-height: 1.4; }
+        .review-content { font-size: 14.5px; color: var(--text-main); white-space: pre-line; line-height: 1.6; margin-bottom: 15px; }
         
-        .loading { color: #888; font-style: italic; }
+        .btn-shopee { 
+            background: linear-gradient(135deg, #ff7a63 0%, #ff5722 100%); 
+            color: #fff !important; text-align: center; padding: 12px; 
+            border-radius: 8px; border: none !important;
+        }
+        .btn-shopee:hover { background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%); }
+        
+        .loading { color: #a99a9f; font-style: italic; }
     </style>
 </head>
 <body>
+
+    <!-- SIDEBAR MENU -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-bio')" class="menu-item active" id="menu-bio">🌿 Kết Nối (BIO)</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-files')" class="menu-item" id="menu-files">📁 Tài Liệu</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-reviews')" class="menu-item" id="menu-reviews">🛍️ Góc Review</a>
+    </div>
+
+    <!-- HEADER: Menu 3 gạch & Đồng hồ -->
+    <div class="header">
+        <div class="menu-btn" onclick="openMenu()">☰</div>
+        <div class="datetime-box">
+            <div class="time-text" id="clock-time">--:--:--</div>
+            <div class="date-text" id="clock-date">Đang tải...</div>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- Thay bằng link ảnh thật của bạn nếu muốn -->
-        <img src="https://via.placeholder.com/100" alt="Shokaimono" class="avatar">
+        <!-- AVATAR (Luôn hiển thị) -->
+        <!-- Đổi link ảnh avatar của bạn vào src bên dưới -->
+        <img src="https://via.placeholder.com/150/ffb7c5/ffffff?text=Avatar" alt="Shokaimono" class="avatar">
         <h1>Shokaimono</h1>
+        <div class="bio-description">Chào mừng bạn đến với góc nhỏ của mình 🌸</div>
         
-        <h2>Kết nối với mình</h2>
-        <div id="bio-list"><p class="loading">Đang tải...</p></div>
+        <!-- NỘI DUNG CÁC TAB -->
+        <!-- TAB 1: BIO -->
+        <div id="tab-bio" class="tab-content active">
+            <h2>Mạng xã hội</h2>
+            <div id="bio-list"><p class="loading">Đang tải dữ liệu...</p></div>
+        </div>
 
-        <h2>Tài liệu & File</h2>
-        <div id="file-list"><p class="loading">Đang tải...</p></div>
+        <!-- TAB 2: TÀI LIỆU -->
+        <div id="tab-files" class="tab-content">
+            <h2>Link Tài Liệu</h2>
+            <div id="file-list"><p class="loading">Đang tải dữ liệu...</p></div>
+        </div>
 
-        <h2>Góc Review</h2>
-        <div id="review-list"><p class="loading">Đang tải...</p></div>
+        <!-- TAB 3: REVIEW -->
+        <div id="tab-reviews" class="tab-content">
+            <h2>Góc Review</h2>
+            <div id="review-list"><p class="loading">Đang tải dữ liệu...</p></div>
+        </div>
     </div>
 
     <script>
-        // 🛑 BẠN DÁN LINK APPS SCRIPT VÀO ĐÂY NHÉ:
+        /* === 1. XỬ LÝ MENU & TABS === */
+        function openMenu() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeMenu() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        function openTab(tabId) {
+            // Ẩn tất cả các tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            // Bỏ màu highlight ở tất cả menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            
+            // Hiển thị tab được chọn
+            document.getElementById(tabId).classList.add('active');
+            // Đổi màu menu tương ứng
+            event.currentTarget.classList.add('active');
+            
+            closeMenu(); // Đóng menu sau khi chọn
+        }
+
+        /* === 2. XỬ LÝ ĐỒNG HỒ & NGÀY ÂM LỊCH === */
+        function updateClock() {
+            const now = new Date();
+            
+            // Lấy Giờ
+            const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false });
+            
+            // Lấy Ngày Dương
+            const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            
+            // Lấy Ngày Âm (Sử dụng API chuẩn của trình duyệt)
+            let dateLunar = "";
+            try {
+                // Calendar 'chinese' đại diện cho Âm lịch
+                const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', year: 'numeric', calendar: 'chinese' });
+                dateLunar = formatter.format(now);
+            } catch (e) {
+                dateLunar = "N/A";
+            }
+
+            document.getElementById('clock-time').innerText = timeStr;
+            document.getElementById('clock-date').innerText = `Dương: ${dateSolar} | Âm: ${dateLunar}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Chạy ngay lập tức khi mở web
+
+        /* === 3. FETCH DỮ LIỆU TỪ GOOGLE SHEETS === */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
 
         fetch(API_URL)
             .then(response => response.json())
             .then(data => {
-                // 1. Đổ dữ liệu Tab BIO
+                // Đổ dữ liệu Tab BIO
                 const bioContainer = document.getElementById('bio-list');
                 if (data.bio && data.bio.length > 0) {
                     bioContainer.innerHTML = data.bio.map(row => 
-                        `<a href="${row[1]}" class="btn btn-social" target="_blank">${row[0]}</a>`
+                        `<a href="${row[1]}" class="btn" target="_blank">${row[0]}</a>`
                     ).join('');
-                } else { bioContainer.innerHTML = ''; }
+                } else { bioContainer.innerHTML = '<p class="loading">Chưa có liên kết nào</p>'; }
 
-                // 2. Đổ dữ liệu Tab LINK FILE
+                // Đổ dữ liệu Tab TÀI LIỆU
                 const fileContainer = document.getElementById('file-list');
                 if (data.files && data.files.length > 0) {
                     fileContainer.innerHTML = data.files.map(row => 
-                        `<a href="${row[1]}" class="btn btn-file" target="_blank">📄 ${row[0]}</a>`
+                        `<a href="${row[1]}" class="btn" target="_blank">📄 ${row[0]}</a>`
                     ).join('');
-                } else { fileContainer.innerHTML = ''; }
+                } else { fileContainer.innerHTML = '<p class="loading">Chưa có tài liệu nào</p>'; }
 
-                // 3. Đổ dữ liệu Tab REVIEW
+                // Đổ dữ liệu Tab REVIEW
                 const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
                     reviewContainer.innerHTML = data.reviews.map(row => 
                         `<div class="review-card">
-                            <h3 class="review-title">#${row[0]} - ${row[1]}</h3>
+                            <h3 class="review-title">🌸 ${row[1]}</h3>
                             <div class="review-content">${row[2]}</div>
                             <a href="${row[3]}" class="btn btn-shopee" target="_blank">Mua trên Shopee</a>
                         </div>`
                     ).join('');
-                } else { reviewContainer.innerHTML = ''; }
+                } else { reviewContainer.innerHTML = '<p class="loading">Chưa có review nào</p>'; }
             })
             .catch(error => {
-                console.error("Lỗi:", error);
+                console.error("Lỗi tải dữ liệu:", error);
                 document.querySelectorAll('.loading').forEach(el => el.innerText = "Không thể tải dữ liệu.");
             });
     </script>
