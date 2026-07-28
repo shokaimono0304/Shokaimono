@@ -2,26 +2,34 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
     <style>
-        /* Tông màu Hoa Anh Đào Pastel */
+        /* Tông màu Sakura Pastel Sang Trọng */
         :root {
-            --sakura-light: #ffe6eb;
-            --sakura-main: #ffb7c5;
-            --sakura-dark: #e88fa1;
-            --text-main: #5a4b50;
-            --white-glass: rgba(255, 255, 255, 0.7);
+            --bg-gradient: linear-gradient(145deg, #fff5f7 0%, #ffe6eb 100%);
+            --sakura-primary: #f8a5c2;
+            --sakura-text: #785a63;
+            --sakura-dark: #d77fa1;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 1);
+            --shadow-soft: 0 10px 25px rgba(232, 169, 185, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #fdfbfb 0%, var(--sakura-light) 100%);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-gradient);
             background-attachment: fixed;
-            color: var(--text-main); 
+            color: var(--sakura-text); 
             margin: 0; 
             padding: 0;
             min-height: 100vh;
+            line-height: 1.5;
         }
 
         /* Header chứa Menu và Đồng hồ */
@@ -29,28 +37,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #fff;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .menu-btn {
-            font-size: 26px;
+            font-size: 24px;
             cursor: pointer;
             color: var(--sakura-dark);
-            transition: 0.2s;
+            padding: 5px;
         }
-        .menu-btn:hover { color: #d66c82; }
 
-        .datetime-box {
-            text-align: right;
-        }
-        .time-text { font-size: 18px; font-weight: bold; color: var(--sakura-dark); }
-        .date-text { font-size: 12px; color: #7a6a6f; margin-top: 2px; }
+        .datetime-box { text-align: right; }
+        .time-text { font-size: 16px; font-weight: 800; color: var(--sakura-dark); letter-spacing: 0.5px; }
+        .date-text { font-size: 11px; color: #9f878f; margin-top: 2px; font-weight: 500; }
 
         /* Sidebar (Menu trượt) */
         .sidebar {
@@ -60,112 +66,172 @@
             z-index: 1000;
             top: 0;
             left: 0;
-            background: rgba(255, 246, 248, 0.95);
+            background: rgba(255, 248, 250, 0.98);
             backdrop-filter: blur(15px);
             overflow-x: hidden;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 5px 0 20px rgba(0,0,0,0.05);
             padding-top: 60px;
-            white-space: nowrap;
         }
         .sidebar a {
-            padding: 15px 25px;
+            padding: 16px 30px;
             text-decoration: none;
             font-size: 16px;
-            color: var(--text-main);
+            color: var(--sakura-text);
             display: block;
-            font-weight: bold;
+            font-weight: 700;
             transition: 0.3s;
             border-left: 4px solid transparent;
+            margin-bottom: 5px;
         }
         .sidebar a:hover, .sidebar a.active {
             color: var(--sakura-dark);
-            background: rgba(255, 183, 197, 0.2);
-            border-left: 4px solid var(--sakura-main);
+            background: linear-gradient(90deg, rgba(248, 165, 194, 0.15) 0%, transparent 100%);
+            border-left: 4px solid var(--sakura-primary);
         }
         .sidebar .close-btn {
             position: absolute;
             top: 10px;
             right: 20px;
-            font-size: 30px;
+            font-size: 32px;
             border-left: none;
             background: transparent;
+            padding: 5px 15px;
+            color: var(--sakura-dark);
         }
 
         /* Vùng nội dung chính */
         .container { 
-            max-width: 480px; 
+            max-width: 500px; 
             margin: auto; 
-            padding: 30px 20px;
+            padding: 30px 20px 40px;
             text-align: center;
         }
         
         .avatar { 
-            width: 110px; height: 110px; 
+            width: 120px; height: 120px; 
             border-radius: 50%; 
-            border: 4px solid #fff; 
-            box-shadow: 0 4px 15px rgba(255, 183, 197, 0.5); 
-            margin-bottom: 10px;
+            border: 5px solid rgba(255,255,255,0.8); 
+            box-shadow: 0 8px 25px rgba(248, 165, 194, 0.4); 
+            margin-bottom: 15px;
             object-fit: cover;
         }
-        h1 { font-size: 26px; margin: 0 0 5px 0; color: var(--sakura-dark); }
-        .bio-description { font-size: 14px; color: #887a7f; margin-bottom: 25px; }
+        h1 { font-size: 24px; font-weight: 800; margin: 0 0 5px 0; color: var(--sakura-dark); letter-spacing: 0.5px; }
+        .bio-description { font-size: 14px; color: #9f878f; margin-bottom: 30px; font-weight: 500; }
 
-        /* Xử lý hiển thị Tab */
-        .tab-content { 
-            display: none; 
-            animation: fadeIn 0.4s ease; 
-        }
+        /* Tabs */
+        .tab-content { display: none; animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .tab-content.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         h2 { 
-            font-size: 16px; color: #887a7f; margin: 0 0 15px 0; 
+            font-size: 14px; color: #9f878f; margin: 0 0 20px 0; 
             text-transform: uppercase; letter-spacing: 2px; 
+            font-weight: 700;
         }
 
-        /* Nút bấm chung */
+        /* Nút bấm (Links) - Pill shape bo tròn hoàn toàn */
         a.btn { 
-            display: block; text-decoration: none; padding: 15px; margin-bottom: 12px; 
-            border-radius: 12px; font-weight: bold; transition: all 0.3s;
-            background: var(--white-glass);
-            color: var(--text-main);
-            border: 1px solid rgba(255,255,255,0.8);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            position: relative;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            text-decoration: none; padding: 16px; margin-bottom: 15px; 
+            border-radius: 50px; font-weight: 700; font-size: 15px;
+            background: var(--card-bg);
+            color: var(--sakura-dark);
+            border: 2px solid var(--card-border);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        a.btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255, 183, 197, 0.3);
-            border-color: var(--sakura-main);
+        a.btn:active, a.btn:hover {
+            transform: scale(0.98);
+            border-color: var(--sakura-primary);
             background: #fff;
         }
 
-        /* Card Review Sản phẩm */
+        /* === TÍNH NĂNG ACCORDION CHO GÓC REVIEW === */
         .review-card { 
-            background: var(--white-glass); 
-            border-radius: 16px; padding: 20px; margin-bottom: 20px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            margin-bottom: 16px; 
+            box-shadow: var(--shadow-soft); 
             text-align: left; 
-            border-top: 4px solid var(--sakura-main);
-            border: 1px solid rgba(255,255,255,0.5);
+            border: 2px solid var(--card-border);
+            overflow: hidden;
+            transition: all 0.3s;
         }
-        .review-title { font-size: 17px; font-weight: bold; color: var(--sakura-dark); margin: 0 0 10px 0; line-height: 1.4; }
-        .review-content { font-size: 14.5px; color: var(--text-main); white-space: pre-line; line-height: 1.6; margin-bottom: 15px; }
+        
+        .review-card[open] {
+            border-color: rgba(248, 165, 194, 0.5);
+            background: #fff;
+        }
+
+        /* Tiêu đề (Tên sản phẩm) */
+        .review-title { 
+            padding: 18px 20px;
+            font-size: 15px; 
+            font-weight: 700; 
+            color: var(--sakura-text); 
+            cursor: pointer;
+            list-style: none; /* Ẩn mũi tên mặc định */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .review-title::-webkit-details-marker { display: none; } /* Ẩn mũi tên Safari */
+        
+        /* Mũi tên chỉ xuống tùy chỉnh */
+        .review-title::after {
+            content: "🌸";
+            font-size: 12px;
+            transition: transform 0.4s ease;
+            filter: grayscale(0.5);
+        }
+        .review-card[open] .review-title::after {
+            transform: rotate(180deg);
+            filter: grayscale(0);
+        }
+
+        /* Phần nội dung chi tiết ẩn bên trong */
+        .review-body {
+            padding: 0 20px 20px 20px;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .review-content { 
+            font-size: 14px; 
+            color: var(--sakura-text); 
+            white-space: pre-line; 
+            line-height: 1.7; 
+            margin-bottom: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(248, 165, 194, 0.4);
+        }
         
         .btn-shopee { 
-            background: linear-gradient(135deg, #ff7a63 0%, #ff5722 100%); 
-            color: #fff !important; text-align: center; padding: 12px; 
-            border-radius: 8px; border: none !important;
+            display: block;
+            background: linear-gradient(135deg, #ff9eb5 0%, #f8a5c2 100%); 
+            color: #fff !important; 
+            text-align: center; 
+            padding: 14px; 
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(248, 165, 194, 0.4);
+            border: none;
         }
-        .btn-shopee:hover { background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%); }
+        .btn-shopee:active { transform: scale(0.97); }
         
-        .loading { color: #a99a9f; font-style: italic; }
+        .loading { color: #bcaaa4; font-style: italic; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -173,9 +239,9 @@
     <!-- SIDEBAR MENU -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-bio')" class="menu-item active" id="menu-bio">🌿 Kết Nối (BIO)</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-files')" class="menu-item" id="menu-files">📁 Tài Liệu</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-reviews')" class="menu-item" id="menu-reviews">🛍️ Góc Review</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-bio')" class="menu-item active">🌸 Mạng Xã Hội</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-files')" class="menu-item">💮 Link Tài Liệu</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-reviews')" class="menu-item">🌺 Góc Review</a>
     </div>
 
     <!-- HEADER: Menu 3 gạch & Đồng hồ -->
@@ -189,69 +255,52 @@
 
     <div class="container">
         <!-- AVATAR (Luôn hiển thị) -->
-        <!-- Đổi link ảnh avatar của bạn vào src bên dưới -->
         <img src="https://via.placeholder.com/150/ffb7c5/ffffff?text=Avatar" alt="Shokaimono" class="avatar">
         <h1>Shokaimono</h1>
-        <div class="bio-description">Chào mừng bạn đến với góc nhỏ của mình 🌸</div>
+        <div class="bio-description">Góc nhỏ ngập tràn hoa anh đào 🌸</div>
         
         <!-- NỘI DUNG CÁC TAB -->
         <!-- TAB 1: BIO -->
         <div id="tab-bio" class="tab-content active">
-            <h2>Mạng xã hội</h2>
+            <h2>🌸 Nơi mình hoạt động</h2>
             <div id="bio-list"><p class="loading">Đang tải dữ liệu...</p></div>
         </div>
 
         <!-- TAB 2: TÀI LIỆU -->
         <div id="tab-files" class="tab-content">
-            <h2>Link Tài Liệu</h2>
+            <h2>💮 Tài liệu chia sẻ</h2>
             <div id="file-list"><p class="loading">Đang tải dữ liệu...</p></div>
         </div>
 
         <!-- TAB 3: REVIEW -->
         <div id="tab-reviews" class="tab-content">
-            <h2>Góc Review</h2>
+            <h2>🌺 Review sản phẩm</h2>
             <div id="review-list"><p class="loading">Đang tải dữ liệu...</p></div>
         </div>
     </div>
 
     <script>
         /* === 1. XỬ LÝ MENU & TABS === */
-        function openMenu() {
-            document.getElementById("mySidebar").style.width = "250px";
-        }
-
-        function closeMenu() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
+        function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
+        function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
 
         function openTab(tabId) {
-            // Ẩn tất cả các tab
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            // Bỏ màu highlight ở tất cả menu
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             
-            // Hiển thị tab được chọn
             document.getElementById(tabId).classList.add('active');
-            // Đổi màu menu tương ứng
             event.currentTarget.classList.add('active');
-            
-            closeMenu(); // Đóng menu sau khi chọn
+            closeMenu();
         }
 
         /* === 2. XỬ LÝ ĐỒNG HỒ & NGÀY ÂM LỊCH === */
         function updateClock() {
             const now = new Date();
-            
-            // Lấy Giờ
             const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false });
-            
-            // Lấy Ngày Dương
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
             
-            // Lấy Ngày Âm (Sử dụng API chuẩn của trình duyệt)
             let dateLunar = "";
             try {
-                // Calendar 'chinese' đại diện cho Âm lịch
                 const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', year: 'numeric', calendar: 'chinese' });
                 dateLunar = formatter.format(now);
             } catch (e) {
@@ -259,10 +308,10 @@
             }
 
             document.getElementById('clock-time').innerText = timeStr;
-            document.getElementById('clock-date').innerText = `Dương: ${dateSolar} | Âm: ${dateLunar}`;
+            document.getElementById('clock-date').innerText = `Dương: ${dateSolar} • Âm: ${dateLunar}`;
         }
         setInterval(updateClock, 1000);
-        updateClock(); // Chạy ngay lập tức khi mở web
+        updateClock();
 
         /* === 3. FETCH DỮ LIỆU TỪ GOOGLE SHEETS === */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
@@ -274,7 +323,7 @@
                 const bioContainer = document.getElementById('bio-list');
                 if (data.bio && data.bio.length > 0) {
                     bioContainer.innerHTML = data.bio.map(row => 
-                        `<a href="${row[1]}" class="btn" target="_blank">${row[0]}</a>`
+                        `<a href="${row[1]}" class="btn" target="_blank">🌸 ${row[0]}</a>`
                     ).join('');
                 } else { bioContainer.innerHTML = '<p class="loading">Chưa có liên kết nào</p>'; }
 
@@ -282,19 +331,21 @@
                 const fileContainer = document.getElementById('file-list');
                 if (data.files && data.files.length > 0) {
                     fileContainer.innerHTML = data.files.map(row => 
-                        `<a href="${row[1]}" class="btn" target="_blank">📄 ${row[0]}</a>`
+                        `<a href="${row[1]}" class="btn" target="_blank">💮 ${row[0]}</a>`
                     ).join('');
                 } else { fileContainer.innerHTML = '<p class="loading">Chưa có tài liệu nào</p>'; }
 
-                // Đổ dữ liệu Tab REVIEW
+                // Đổ dữ liệu Tab REVIEW (Dạng Accordion thu gọn)
                 const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
                     reviewContainer.innerHTML = data.reviews.map(row => 
-                        `<div class="review-card">
-                            <h3 class="review-title">🌸 ${row[1]}</h3>
-                            <div class="review-content">${row[2]}</div>
-                            <a href="${row[3]}" class="btn btn-shopee" target="_blank">Mua trên Shopee</a>
-                        </div>`
+                        `<details class="review-card">
+                            <summary class="review-title">🌺 ${row[1]}</summary>
+                            <div class="review-body">
+                                <div class="review-content">${row[2]}</div>
+                                <a href="${row[3]}" class="btn-shopee" target="_blank">🏵️ Mua trên Shopee</a>
+                            </div>
+                        </details>`
                     ).join('');
                 } else { reviewContainer.innerHTML = '<p class="loading">Chưa có review nào</p>'; }
             })
