@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shokaimono - Links & Reviews</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; color: #333; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 480px; margin: auto; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 10px; }
+        h1 { font-size: 24px; margin: 0 0 5px 0; color: #222; }
+        h2 { font-size: 16px; color: #666; margin: 20px 0 10px 0; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        
+        /* Nút chung */
+        a.btn { display: block; text-decoration: none; padding: 14px; margin-bottom: 12px; border-radius: 8px; font-weight: bold; transition: all 0.2s; }
+        
+        /* Nút Mạng Xã Hội */
+        .btn-social { background-color: #fff; color: #333; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn-social:hover { background-color: #f0f0f0; border-color: #ccc; }
+
+        /* Nút File Tài liệu */
+        .btn-file { background-color: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1; }
+        .btn-file:hover { background-color: #cbd5e1; }
+
+        /* Card Review Sản phẩm */
+        .review-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left; border-left: 4px solid #d4af37; }
+        .review-title { font-size: 16px; font-weight: bold; color: #222; margin: 0 0 8px 0; line-height: 1.4; }
+        .review-content { font-size: 14px; color: #555; white-space: pre-line; line-height: 1.6; margin-bottom: 15px; }
+        .btn-shopee { background-color: #ff5722; color: #fff; text-align: center; padding: 12px; border-radius: 6px; }
+        .btn-shopee:hover { background-color: #e64a19; }
+        
+        .loading { color: #888; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Thay bằng link ảnh thật của bạn nếu muốn -->
+        <img src="https://via.placeholder.com/100" alt="Shokaimono" class="avatar">
+        <h1>Shokaimono</h1>
+        
+        <h2>Kết nối với mình</h2>
+        <div id="bio-list"><p class="loading">Đang tải...</p></div>
+
+        <h2>Tài liệu & File</h2>
+        <div id="file-list"><p class="loading">Đang tải...</p></div>
+
+        <h2>Góc Review</h2>
+        <div id="review-list"><p class="loading">Đang tải...</p></div>
+    </div>
+
+    <script>
+        // 🛑 BẠN DÁN LINK APPS SCRIPT VÀO ĐÂY NHÉ:
+        const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
+
+        fetch(API_URL)
+            .then(response => response.json())
+            .then(data => {
+                // 1. Đổ dữ liệu Tab BIO
+                const bioContainer = document.getElementById('bio-list');
+                if (data.bio && data.bio.length > 0) {
+                    bioContainer.innerHTML = data.bio.map(row => 
+                        `<a href="${row[1]}" class="btn btn-social" target="_blank">${row[0]}</a>`
+                    ).join('');
+                } else { bioContainer.innerHTML = ''; }
+
+                // 2. Đổ dữ liệu Tab LINK FILE
+                const fileContainer = document.getElementById('file-list');
+                if (data.files && data.files.length > 0) {
+                    fileContainer.innerHTML = data.files.map(row => 
+                        `<a href="${row[1]}" class="btn btn-file" target="_blank">📄 ${row[0]}</a>`
+                    ).join('');
+                } else { fileContainer.innerHTML = ''; }
+
+                // 3. Đổ dữ liệu Tab REVIEW
+                const reviewContainer = document.getElementById('review-list');
+                if (data.reviews && data.reviews.length > 0) {
+                    reviewContainer.innerHTML = data.reviews.map(row => 
+                        `<div class="review-card">
+                            <h3 class="review-title">#${row[0]} - ${row[1]}</h3>
+                            <div class="review-content">${row[2]}</div>
+                            <a href="${row[3]}" class="btn btn-shopee" target="_blank">Mua trên Shopee</a>
+                        </div>`
+                    ).join('');
+                } else { reviewContainer.innerHTML = ''; }
+            })
+            .catch(error => {
+                console.error("Lỗi:", error);
+                document.querySelectorAll('.loading').forEach(el => el.innerText = "Không thể tải dữ liệu.");
+            });
+    </script>
+</body>
+</html>
