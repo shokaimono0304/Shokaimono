@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
+    <!-- Ưu tiên tải DNS Google để tăng tốc độ kết nối API -->
+    <link rel="preconnect" href="https://script.google.com">
     <style>
         /* Tông màu Neo-Brutalism Pastel */
         :root {
@@ -27,7 +29,8 @@
         }
 
         body { 
-            font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            /* Sử dụng Font hệ thống siêu tốc */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-main);
             color: var(--text-main); 
             min-height: 100vh;
@@ -185,6 +188,26 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
+        /* === HIỆU ỨNG SKELETON LOADING (TỐI ƯU CẢM GIÁC CHỜ ĐỢI) === */
+        .skeleton {
+            background: #e2e8f0;
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+            border-radius: 14px;
+            height: 58px;
+            margin-bottom: 16px;
+            border: 3px solid #cbd5e1;
+            box-shadow: 4px 4px 0px #cbd5e1;
+            width: 100%;
+        }
+        .skeleton-large { height: 75px; border-radius: 16px; }
+        
+        @keyframes skeletonLoading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         /* === CÁC NÚT BẤM (MẠNG XÃ HỘI, FILE) === */
         a.btn { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -231,12 +254,8 @@
             margin-bottom: 16px; padding-top: 12px; border-top: 2px dashed var(--border-color);
         }
         
-        /* Cụm nút mua sắm đa nền tảng */
         .shop-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
         }
         .btn-shop { 
             flex: 1; min-width: 90px;
@@ -248,12 +267,9 @@
         }
         .btn-shop:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border-color); }
         
-        /* Màu sắc riêng cho từng nền tảng */
         .btn-shopee { background: #ee4d2d; }
         .btn-lazada { background: #0a31aa; }
         .btn-tiktok { background: #000000; }
-
-        .loading { text-align: center; color: var(--text-main); font-weight: 800; font-size: 14px; margin-top: 20px; }
 
         /* === NÚT VỀ ĐẦU TRANG === */
         #scrollTopBtn {
@@ -277,13 +293,10 @@
 </head>
 <body>
     
-    <!-- Lớp hoa anh đào rơi -->
     <div id="bg-container"></div>
 
-    <!-- Nút Lên Đầu Trang -->
     <button id="scrollTopBtn" onclick="scrollToTop()">🌸</button>
 
-    <!-- SIDEBAR MENU -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
         <a href="javascript:void(0)" onclick="openTab('tab-bio', this)" class="menu-item active">🌸 Mạng Xã Hội</a>
@@ -291,7 +304,6 @@
         <a href="javascript:void(0)" onclick="openTab('tab-reviews', this)" class="menu-item">🍡 Góc Review</a>
     </div>
 
-    <!-- HEADER -->
     <div class="header">
         <div class="menu-btn" onclick="openMenu()">☰</div>
         <div class="datetime-box">
@@ -305,23 +317,33 @@
 
     <div class="container">
         
-        <!-- Khu vực Tiêu đề đã đổi vị trí -->
         <div class="title-wrapper">
             <h1>🌸 Shokaimono 🌸</h1>
             <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
         </div>
         
-        <!-- NỘI DUNG CÁC TAB -->
+        <!-- SỬ DỤNG KHUNG XƯƠNG (SKELETON) THAY VÌ CHỮ "ĐANG TẢI" -->
         <div id="tab-bio" class="tab-content active">
-            <div id="bio-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="bio-list">
+                <div class="skeleton"></div>
+                <div class="skeleton"></div>
+                <div class="skeleton"></div>
+            </div>
         </div>
 
         <div id="tab-files" class="tab-content">
-            <div id="file-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="file-list">
+                <div class="skeleton"></div>
+                <div class="skeleton"></div>
+            </div>
         </div>
 
         <div id="tab-reviews" class="tab-content">
-            <div id="review-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="review-list">
+                <div class="skeleton skeleton-large"></div>
+                <div class="skeleton skeleton-large"></div>
+                <div class="skeleton skeleton-large"></div>
+            </div>
         </div>
     </div>
 
@@ -422,12 +444,16 @@
         const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
         function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
-        /* FETCH DỮ LIỆU TỪ GOOGLE SHEETS */
+        /* FETCH DỮ LIỆU TỪ GOOGLE SHEETS (DÙNG ASYNC ĐỂ KHÔNG CHẶN GIAO DIỆN) */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
 
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => {
+        // Hàm gọi API chạy nền
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Đổ dữ liệu Tab BIO
                 const bioContainer = document.getElementById('bio-list');
                 if (data.bio && data.bio.length > 0) {
                     bioContainer.innerHTML = data.bio.map(row => 
@@ -436,8 +462,9 @@
                             <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { bioContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
+                } else { bioContainer.innerHTML = '<p style="text-align:center">Chưa có liên kết nào</p>'; }
 
+                // Đổ dữ liệu Tab TÀI LIỆU
                 const fileContainer = document.getElementById('file-list');
                 if (data.files && data.files.length > 0) {
                     fileContainer.innerHTML = data.files.map(row => 
@@ -446,13 +473,12 @@
                             <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { fileContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
+                } else { fileContainer.innerHTML = '<p style="text-align:center">Chưa có tài liệu nào</p>'; }
 
+                // Đổ dữ liệu Tab REVIEW
                 const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
                     reviewContainer.innerHTML = data.reviews.map(row => {
-                        // TẠO NÚT MUA HÀNG ĐA NỀN TẢNG
-                        // Cột 4 (index 3): Shopee, Cột 5 (index 4): Lazada, Cột 6 (index 5): TikTok
                         let shopeeBtn = row[3] ? `<a href="${row[3]}" class="btn-shop btn-shopee" target="_blank">🛒 Shopee</a>` : '';
                         let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
                         let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
@@ -469,12 +495,18 @@
                             </div>
                         </details>`;
                     }).join('');
-                } else { reviewContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
-            })
-            .catch(error => {
+                } else { reviewContainer.innerHTML = '<p style="text-align:center">Chưa có review nào</p>'; }
+                
+            } catch (error) {
                 console.error("Lỗi:", error);
-                document.querySelectorAll('.loading').forEach(el => el.innerText = "Lỗi khi tải dữ liệu.");
-            });
+                document.getElementById('bio-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
+                document.getElementById('file-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
+                document.getElementById('review-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
+            }
+        }
+        
+        // Gọi hàm tải dữ liệu ngay khi vừa load xong giao diện nền
+        document.addEventListener("DOMContentLoaded", loadData);
     </script>
 </body>
 </html>
