@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
     <style>
-        /* Tông màu Neo-Brutalism Pastel (Dựa theo image_33be02.png) */
+        /* Tông màu Neo-Brutalism Pastel */
         :root {
-            --bg-main: #f0f8f9;       /* Nền xanh nhạt giống ảnh */
+            --bg-main: #f0f8f9;       /* Nền xanh nhạt */
             --border-color: #2d3436;  /* Viền đen xám đậm */
             --shadow-color: #2d3436;  /* Bóng đổ cứng */
             
@@ -16,7 +16,7 @@
             --btn-yellow: #fff3cd;    /* Vàng nhạt */
             
             --text-main: #2d3436;
-            --text-title: #d63031;    /* Chữ tiêu đề màu đỏ/hồng đậm */
+            --text-title: #d63031;    /* Chữ tiêu đề */
         }
 
         * {
@@ -27,7 +27,7 @@
         }
 
         body { 
-            font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Font tròn trịa */
+            font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-main);
             color: var(--text-main); 
             min-height: 100vh;
@@ -35,23 +35,28 @@
             overflow-x: hidden;
         }
 
-        /* --- BACKGROUND BONG BÓNG MỜ (Giống ảnh) --- */
+        /* --- BACKGROUND HOA ANH ĐÀO RƠI --- */
         #bg-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none; z-index: 0;
+            pointer-events: none; z-index: 0; overflow: hidden;
         }
-        .bubble {
+        .petal {
             position: absolute;
-            background: #d0e8e9; /* Màu chấm bi mờ */
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: floatUp linear infinite;
+            background: linear-gradient(135deg, #ffd3e0 0%, #ffb7c5 100%);
+            border-radius: 15px 0px 15px 0px;
+            opacity: 0.7;
+            box-shadow: 1px 1px 3px rgba(255, 183, 197, 0.5);
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
         }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(1); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { top: 110%; opacity: 0; }
+        }
+        @keyframes sway {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(25px) rotate(45deg); }
         }
 
         /* --- HEADER & MENU --- */
@@ -95,7 +100,7 @@
         .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
         .date-lunar { font-size: 11px; color: var(--border-color); }
 
-        /* --- SIDEBAR MENU (Khối cứng) --- */
+        /* --- SIDEBAR MENU --- */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0;
             background: var(--bg-main);
@@ -106,9 +111,9 @@
         .sidebar a {
             padding: 16px 25px; text-decoration: none; font-size: 16px;
             color: var(--text-main); display: block; font-weight: 800;
-            border-bottom: 3px solid var(--border-color); transition: 0.1s;
             margin: 0 15px 15px 15px; border: 3px solid var(--border-color);
             border-radius: 12px; background: #fff; box-shadow: 3px 3px 0px var(--shadow-color);
+            transition: 0.1s;
         }
         .sidebar a:active, .sidebar a.active {
             background: var(--btn-pink); transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--shadow-color);
@@ -123,16 +128,42 @@
             width: 100%; max-width: 400px; margin: auto; padding: 10px 20px 80px 20px;
             position: relative; z-index: 10;
         }
+
+        /* Khu vực Tiêu đề */
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tên Tab hiển thị trên cùng */
+        .tab-indicator {
+            display: inline-block;
+            background: var(--btn-yellow);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--border-color);
+            box-shadow: 2px 2px 0px var(--shadow-color);
+            text-transform: uppercase;
+        }
         
-        /* Tiêu đề SHOKAIMONO (Giống nút HY HY WORKSPACE) */
+        /* Tiêu đề SHOKAIMONO */
         h1 { 
-            font-size: 24px; font-weight: 900; margin-bottom: 25px; text-align: center;
+            font-size: 24px; font-weight: 900; text-align: center;
             text-transform: uppercase; color: var(--text-title);
             background: var(--btn-pink);
             border: 3px solid var(--border-color);
             border-radius: 16px;
-            padding: 15px;
+            padding: 15px 20px;
             box-shadow: 4px 4px 0px var(--shadow-color);
+            margin: 0;
+            width: 100%;
         }
 
         /* Tabs */
@@ -143,7 +174,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* === CÁC NÚT BẤM (Viền đen, bóng cứng) === */
+        /* === CÁC NÚT BẤM === */
         a.btn { 
             display: flex; justify-content: space-between; align-items: center; 
             text-decoration: none; padding: 16px 20px; margin-bottom: 16px; 
@@ -153,9 +184,8 @@
             color: var(--text-main);
             width: 100%; 
             transition: 0.1s;
-            background: var(--btn-blue); /* Mặc định xanh nhạt */
+            background: var(--btn-blue);
         }
-        /* Phối màu nút xen kẽ cho sinh động */
         a.btn:nth-child(odd) { background: var(--btn-pink); }
         a.btn:nth-child(even) { background: var(--btn-blue); }
         
@@ -202,7 +232,7 @@
         
         .loading { text-align: center; color: var(--text-main); font-weight: 800; font-size: 14px; margin-top: 20px; }
 
-        /* === NÚT VỀ ĐẦU TRANG (SCROLL TO TOP) === */
+        /* === NÚT VỀ ĐẦU TRANG === */
         #scrollTopBtn {
             display: none; 
             position: fixed; bottom: 25px; right: 20px; z-index: 999;
@@ -224,7 +254,7 @@
 </head>
 <body>
     
-    <!-- Lớp bong bóng bay lơ lửng -->
+    <!-- Lớp hoa anh đào rơi -->
     <div id="bg-container"></div>
 
     <!-- Nút Lên Đầu Trang -->
@@ -233,9 +263,9 @@
     <!-- SIDEBAR MENU -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-bio')" class="menu-item active">🌸 Mạng Xã Hội</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-files')" class="menu-item">💮 Link Tài Liệu</a>
-        <a href="javascript:void(0)" onclick="openTab('tab-reviews')" class="menu-item">🌺 Góc Review</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-bio', this)" class="menu-item active">🌸 Mạng Xã Hội</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-files', this)" class="menu-item">💮 Link Tài Liệu</a>
+        <a href="javascript:void(0)" onclick="openTab('tab-reviews', this)" class="menu-item">🌺 Góc Review</a>
     </div>
 
     <!-- HEADER: Menu 3 gạch & Đồng hồ -->
@@ -251,7 +281,12 @@
     </div>
 
     <div class="container">
-        <h1>🌸 Shokaimono 🌸</h1>
+        
+        <!-- Khu vực Tiêu đề có Tên Tab động -->
+        <div class="title-wrapper">
+            <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
+            <h1>🌸 Shokaimono 🌸</h1>
+        </div>
         
         <!-- NỘI DUNG CÁC TAB -->
         <div id="tab-bio" class="tab-content active">
@@ -268,22 +303,22 @@
     </div>
 
     <script>
-        /* TẠO BACKGROUND BONG BÓNG */
-        function createBubbles() {
+        /* TẠO BACKGROUND HOA ANH ĐÀO */
+        function createSakura() {
             const container = document.getElementById('bg-container');
-            for (let i = 0; i < 15; i++) {
-                let bubble = document.createElement('div');
-                bubble.classList.add('bubble');
-                let size = Math.random() * 20 + 10;
-                bubble.style.width = size + 'px';
-                bubble.style.height = size + 'px';
-                bubble.style.left = Math.random() * 100 + 'vw';
-                bubble.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                bubble.style.animationDelay = (Math.random() * 10) + 's';
-                container.appendChild(bubble);
+            for (let i = 0; i < 25; i++) {
+                let petal = document.createElement('div');
+                petal.classList.add('petal');
+                let size = Math.random() * 8 + 6;
+                petal.style.width = size + 'px';
+                petal.style.height = (size + 3) + 'px';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = (Math.random() * 5 + 5) + 's, ' + (Math.random() * 3 + 2) + 's';
+                petal.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 10) + 's';
+                container.appendChild(petal);
             }
         }
-        createBubbles();
+        createSakura();
 
         /* XỬ LÝ NÚT CUỘN LÊN ĐẦU TRANG */
         window.onscroll = function() {
@@ -298,14 +333,22 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        /* XỬ LÝ MENU */
+        /* XỬ LÝ MENU & ĐỔI TÊN TAB ĐỘNG */
         function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
         function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
-        function openTab(tabId) {
+        
+        function openTab(tabId, btnElement) {
+            // Đổi content
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            
+            // Đổi active menu
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            // Đổi chữ trên cùng
+            document.getElementById('current-tab-title').innerText = btnElement.innerText;
+            
             closeMenu();
         }
 
@@ -317,12 +360,11 @@
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
             document.getElementById('clock-date-solar').innerText = `${dateSolar}`;
             
-            // Lấy Lịch Âm và chỉ cắt đúng phần Ngày/Tháng, vứt bỏ năm (43...)
             try {
                 const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
-                let rawLunar = formatter.format(now); // Thường ra "14/6" hoặc "14/6/43"
-                let lunarParts = rawLunar.split(/[\/\-.]/); // Tách chuỗi bằng dấu / hoặc -
-                let dateLunar = `${lunarParts[0]}/${lunarParts[1]}`; // Chỉ ghép ngày và tháng lại
+                let rawLunar = formatter.format(now);
+                let lunarParts = rawLunar.split(/[\/\-.]/);
+                let dateLunar = `${lunarParts[0]}/${lunarParts[1]}`; 
                 document.getElementById('clock-date-lunar').innerText = `(Âm: ${dateLunar})`;
             } catch (e) {
                 document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`;
