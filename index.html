@@ -7,16 +7,16 @@
     <style>
         /* Tông màu Neo-Brutalism Pastel */
         :root {
-            --bg-main: #f0f8f9;       /* Nền xanh nhạt */
-            --border-color: #2d3436;  /* Viền đen xám đậm */
-            --shadow-color: #2d3436;  /* Bóng đổ cứng */
+            --bg-main: #f0f8f9;       
+            --border-color: #2d3436;  
+            --shadow-color: #2d3436;  
             
-            --btn-pink: #ffe5ec;      /* Hồng nhạt */
-            --btn-blue: #e5f0ff;      /* Xanh dương nhạt */
-            --btn-yellow: #fff3cd;    /* Vàng nhạt */
+            --btn-pink: #ffe5ec;      
+            --btn-blue: #e5f0ff;      
+            --btn-yellow: #fff3cd;    
             
             --text-main: #2d3436;
-            --text-title: #d63031;    /* Chữ tiêu đề */
+            --text-title: #d63031;    
         }
 
         * {
@@ -46,36 +46,28 @@
             border-radius: 15px 0px 15px 0px;
             opacity: 0.7;
             box-shadow: 1px 1px 3px rgba(255, 183, 197, 0.5);
-            /* Animation mặc định, sẽ được JS can thiệp */
             animation: fall linear infinite, sway ease-in-out infinite alternate;
         }
-        
-        /* Hiệu ứng Rơi chuẩn */
         @keyframes fall {
             0% { top: -10%; opacity: 0; }
             10% { opacity: 0.8; }
             80% { opacity: 0.8; }
             100% { top: 110%; opacity: 0; }
         }
-        /* Hiệu ứng Lắc lư chuẩn */
         @keyframes sway {
             0% { transform: translateX(0) rotate(0deg); }
             100% { transform: translateX(25px) rotate(45deg); }
         }
-        
-        /* Hiệu ứng T4: Mưa xiên */
         @keyframes sway-rain {
             0% { transform: translateX(0) rotate(0deg); }
             100% { transform: translateX(60px) rotate(45deg); }
         }
-        /* Hiệu ứng T5: Hoa bay ngược lên trời */
         @keyframes fall-reverse {
             0% { top: 110%; opacity: 0; }
             10% { opacity: 0.8; }
             80% { opacity: 0.8; }
             100% { top: -10%; opacity: 0; }
         }
-        /* Hiệu ứng T6: Hoa phát sáng */
         .glow-petal {
             box-shadow: 0 0 12px 3px rgba(255, 105, 180, 0.8) !important;
             background: linear-gradient(135deg, #ff9eb5 0%, #ff4b82 100%) !important;
@@ -106,7 +98,6 @@
         }
         .menu-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--shadow-color); }
 
-        /* Đồng hồ khối hộp */
         .datetime-box { 
             display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
         }
@@ -161,21 +152,6 @@
             gap: 10px;
         }
 
-        /* Tên Tab hiển thị trên cùng */
-        .tab-indicator {
-            display: inline-block;
-            background: var(--btn-yellow);
-            border: 3px solid var(--border-color);
-            border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 13px;
-            font-weight: 900;
-            color: var(--border-color);
-            box-shadow: 2px 2px 0px var(--shadow-color);
-            text-transform: uppercase;
-        }
-        
-        /* Tiêu đề SHOKAIMONO */
         h1 { 
             font-size: 24px; font-weight: 900; text-align: center;
             text-transform: uppercase; color: var(--text-title);
@@ -188,6 +164,19 @@
             width: 100%;
         }
 
+        .tab-indicator {
+            display: inline-block;
+            background: var(--btn-yellow);
+            border: 3px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--border-color);
+            box-shadow: 2px 2px 0px var(--shadow-color);
+            text-transform: uppercase;
+        }
+
         /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -196,7 +185,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* === CÁC NÚT BẤM === */
+        /* === CÁC NÚT BẤM (MẠNG XÃ HỘI, FILE) === */
         a.btn { 
             display: flex; justify-content: space-between; align-items: center; 
             text-decoration: none; padding: 16px 20px; margin-bottom: 16px; 
@@ -215,7 +204,6 @@
             transform: translate(3px, 3px);
             box-shadow: 1px 1px 0px var(--shadow-color);
         }
-
         .btn-text { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         .btn-icon-right { color: var(--border-color); font-size: 16px; font-weight: 900; }
 
@@ -243,15 +231,28 @@
             margin-bottom: 16px; padding-top: 12px; border-top: 2px dashed var(--border-color);
         }
         
-        .btn-shopee { 
-            display: block; background: var(--text-title); color: #fff !important; 
-            text-align: center; padding: 14px; border-radius: 12px; text-decoration: none;
-            font-weight: 800; font-size: 14px;
-            border: 3px solid var(--border-color);
-            box-shadow: 3px 3px 0px var(--border-color); transition: 0.1s;
+        /* Cụm nút mua sắm đa nền tảng */
+        .shop-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
         }
-        .btn-shopee:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
+        .btn-shop { 
+            flex: 1; min-width: 90px;
+            display: block; color: #fff !important; 
+            text-align: center; padding: 12px 8px; border-radius: 12px; text-decoration: none;
+            font-weight: 800; font-size: 13px;
+            border: 3px solid var(--border-color);
+            box-shadow: 2px 2px 0px var(--border-color); transition: 0.1s;
+        }
+        .btn-shop:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border-color); }
         
+        /* Màu sắc riêng cho từng nền tảng */
+        .btn-shopee { background: #ee4d2d; }
+        .btn-lazada { background: #0a31aa; }
+        .btn-tiktok { background: #000000; }
+
         .loading { text-align: center; color: var(--text-main); font-weight: 800; font-size: 14px; margin-top: 20px; }
 
         /* === NÚT VỀ ĐẦU TRANG === */
@@ -290,7 +291,7 @@
         <a href="javascript:void(0)" onclick="openTab('tab-reviews', this)" class="menu-item">🍡 Góc Review</a>
     </div>
 
-    <!-- HEADER: Menu 3 gạch & Đồng hồ -->
+    <!-- HEADER -->
     <div class="header">
         <div class="menu-btn" onclick="openMenu()">☰</div>
         <div class="datetime-box">
@@ -304,10 +305,10 @@
 
     <div class="container">
         
-        <!-- Khu vực Tiêu đề có Tên Tab động -->
+        <!-- Khu vực Tiêu đề đã đổi vị trí -->
         <div class="title-wrapper">
-            <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
             <h1>🌸 Shokaimono 🌸</h1>
+            <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
         </div>
         
         <!-- NỘI DUNG CÁC TAB -->
@@ -325,64 +326,42 @@
     </div>
 
     <script>
-        /* TẠO BACKGROUND HOA ANH ĐÀO (HIỆU ỨNG THAY ĐỔI THEO NGÀY TRONG TUẦN) */
+        /* TẠO BACKGROUND HOA ANH ĐÀO */
         function createSakura() {
             const container = document.getElementById('bg-container');
-            const day = new Date().getDay(); // Lấy ngày hiện tại: 0 (Chủ Nhật) đến 6 (Thứ Bảy)
+            const day = new Date().getDay(); 
             
-            let numPetals = 25;
-            let speedMod = 1;
-            let swayMod = 1;
-            let effectType = 'normal'; // Các hiệu ứng: normal, rain, reverse, glow, emoji
-            
-            // Bộ sưu tập emoji chủ đề Hoa anh đào/Mùa xuân
+            let numPetals = 25; let speedMod = 1; let swayMod = 1; let effectType = 'normal'; 
             const themeEmojis = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
             
-            // XÉT HIỆU ỨNG THEO NGÀY
-            if (day === 0) { // Chủ Nhật: Chậm rãi, cánh hoa to
-                numPetals = 15; speedMod = 1.5; 
-            } else if (day === 1) { // Thứ 2: Nhanh, nhiều năng lượng
-                numPetals = 35; speedMod = 0.6;
-            } else if (day === 2) { // Thứ 3: Gió thổi mạnh
-                numPetals = 25; swayMod = 0.4;
-            } else if (day === 3) { // Thứ 4: Mưa xiên li ti
-                numPetals = 40; speedMod = 0.8; effectType = 'rain';
-            } else if (day === 4) { // Thứ 5: Hoa bay lật ngược lên trời
-                numPetals = 25; effectType = 'reverse';
-            } else if (day === 5) { // Thứ 6: Cánh hoa phát sáng
-                numPetals = 20; effectType = 'glow';
-            } else if (day === 6) { // Thứ 7: Mưa biểu tượng emoji đa dạng
-                numPetals = 25; effectType = 'emoji';
-            }
+            if (day === 0) { numPetals = 15; speedMod = 1.5; } 
+            else if (day === 1) { numPetals = 35; speedMod = 0.6; } 
+            else if (day === 2) { numPetals = 25; swayMod = 0.4; } 
+            else if (day === 3) { numPetals = 40; speedMod = 0.8; effectType = 'rain'; } 
+            else if (day === 4) { numPetals = 25; effectType = 'reverse'; } 
+            else if (day === 5) { numPetals = 20; effectType = 'glow'; } 
+            else if (day === 6) { numPetals = 25; effectType = 'emoji'; }
 
             for (let i = 0; i < numPetals; i++) {
                 let petal = document.createElement('div');
                 petal.classList.add('petal');
                 
                 let size = Math.random() * 8 + 6;
-                if (day === 0) size += 4; // CN hoa to hơn
-                if (effectType === 'rain') size -= 2; // T4 hoa nhỏ hơn
+                if (day === 0) size += 4; 
+                if (effectType === 'rain') size -= 2; 
 
-                // NẾU LÀ THỨ 7 (Emoji Rain)
                 if (effectType === 'emoji') {
                     petal.innerText = themeEmojis[Math.floor(Math.random() * themeEmojis.length)];
-                    petal.style.background = 'transparent';
-                    petal.style.boxShadow = 'none';
-                    petal.style.fontSize = (size + 12) + 'px';
-                    petal.style.display = 'flex';
-                    petal.style.alignItems = 'center';
-                    petal.style.justifyContent = 'center';
+                    petal.style.background = 'transparent'; petal.style.boxShadow = 'none';
+                    petal.style.fontSize = (size + 12) + 'px'; petal.style.display = 'flex';
+                    petal.style.alignItems = 'center'; petal.style.justifyContent = 'center';
                 } else {
-                    petal.style.width = size + 'px';
-                    petal.style.height = (size + 3) + 'px';
+                    petal.style.width = size + 'px'; petal.style.height = (size + 3) + 'px';
                 }
 
-                // NẾU LÀ THỨ 6 (Phát sáng)
                 if (effectType === 'glow') petal.classList.add('glow-petal');
-
                 petal.style.left = Math.random() * 100 + 'vw';
                 
-                // Chọn keyframes tùy chỉnh
                 let fallAnim = effectType === 'reverse' ? 'fall-reverse' : 'fall';
                 let swayAnim = effectType === 'rain' ? 'sway-rain' : 'sway';
                 
@@ -400,30 +379,22 @@
             let btn = document.getElementById("scrollTopBtn");
             if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
                 btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
+            } else { btn.style.display = "none"; }
         };
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
         /* XỬ LÝ MENU & ĐỔI TÊN TAB ĐỘNG */
         function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
         function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
         
         function openTab(tabId, btnElement) {
-            // Đổi content
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             
-            // Đổi active menu
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             btnElement.classList.add('active');
             
-            // Đổi chữ trên cùng
             document.getElementById('current-tab-title').innerText = btnElement.innerText;
-            
             closeMenu();
         }
 
@@ -435,7 +406,6 @@
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
             document.getElementById('clock-date-solar').innerText = `${dateSolar}`;
             
-            // Lấy Lịch Âm và xử lý chuỗi (Bỏ năm đi, chỉ lấy Ngày/Tháng)
             try {
                 const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
                 let rawLunar = formatter.format(now);
@@ -449,11 +419,8 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        /* HÀM CHỌN EMOJI NGẪU NHIÊN CHO CÁC MỤC */
         const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
-        function getRandomIcon() {
-            return listIcons[Math.floor(Math.random() * listIcons.length)];
-        }
+        function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
         /* FETCH DỮ LIỆU TỪ GOOGLE SHEETS */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
@@ -483,15 +450,25 @@
 
                 const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
-                    reviewContainer.innerHTML = data.reviews.map(row => 
-                        `<details class="review-card">
+                    reviewContainer.innerHTML = data.reviews.map(row => {
+                        // TẠO NÚT MUA HÀNG ĐA NỀN TẢNG
+                        // Cột 4 (index 3): Shopee, Cột 5 (index 4): Lazada, Cột 6 (index 5): TikTok
+                        let shopeeBtn = row[3] ? `<a href="${row[3]}" class="btn-shop btn-shopee" target="_blank">🛒 Shopee</a>` : '';
+                        let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
+                        let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
+                        
+                        return `<details class="review-card">
                             <summary class="review-title">${getRandomIcon()} ${row[1]}</summary>
                             <div class="review-body">
                                 <div class="review-content">${row[2]}</div>
-                                <a href="${row[3]}" class="btn-shopee" target="_blank">Mua trên Shopee</a>
+                                <div class="shop-buttons">
+                                    ${shopeeBtn}
+                                    ${lazadaBtn}
+                                    ${tiktokBtn}
+                                </div>
                             </div>
-                        </details>`
-                    ).join('');
+                        </details>`;
+                    }).join('');
                 } else { reviewContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
             })
             .catch(error => {
