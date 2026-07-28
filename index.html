@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
     <style>
-        /* Tông màu Sakura Pastel Sang Trọng */
+        /* Tông màu Sakura Premium */
         :root {
-            --bg-gradient: linear-gradient(145deg, #fff5f7 0%, #ffe6eb 100%);
-            --sakura-primary: #f8a5c2;
-            --sakura-text: #785a63;
+            --bg-gradient: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            --sakura-primary: #ffb3c6;
+            --sakura-text: #5c4148;
             --sakura-dark: #d77fa1;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --card-border: rgba(255, 255, 255, 1);
-            --shadow-soft: 0 10px 25px rgba(232, 169, 185, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --card-border: rgba(255, 255, 255, 0.8);
+            --shadow-soft: 0 8px 32px rgba(215, 127, 161, 0.15);
         }
 
         * {
@@ -30,6 +30,41 @@
             padding: 0;
             min-height: 100vh;
             line-height: 1.5;
+            position: relative;
+        }
+
+        /* Container chứa hiệu ứng hoa rơi */
+        #sakura-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Cánh hoa anh đào */
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #ffcbe3 0%, #ffb7c5 100%);
+            border-radius: 15px 0px 15px 0px;
+            opacity: 0.8;
+            box-shadow: 0 0 5px rgba(255,183,197,0.5);
+            animation: fall linear infinite, sway ease-in-out infinite alternate;
+        }
+
+        @keyframes fall {
+            0% { top: -10%; opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(0) rotate(0deg); }
+            100% { transform: translateX(25px) rotate(45deg); }
         }
 
         /* Header chứa Menu và Đồng hồ */
@@ -37,10 +72,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 0;
@@ -48,15 +83,16 @@
         }
 
         .menu-btn {
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
             color: var(--sakura-dark);
-            padding: 5px;
+            transition: 0.3s;
         }
+        .menu-btn:active { transform: scale(0.9); }
 
         .datetime-box { text-align: right; }
-        .time-text { font-size: 16px; font-weight: 800; color: var(--sakura-dark); letter-spacing: 0.5px; }
-        .date-text { font-size: 11px; color: #9f878f; margin-top: 2px; font-weight: 500; }
+        .time-text { font-size: 16px; font-weight: 800; color: var(--sakura-dark); letter-spacing: 1px; }
+        .date-text { font-size: 11px; color: #8e737c; margin-top: 2px; font-weight: 600; text-transform: uppercase;}
 
         /* Sidebar (Menu trượt) */
         .sidebar {
@@ -66,12 +102,13 @@
             z-index: 1000;
             top: 0;
             left: 0;
-            background: rgba(255, 248, 250, 0.98);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 245, 248, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             overflow-x: hidden;
             transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 5px 0 20px rgba(0,0,0,0.05);
-            padding-top: 60px;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.1);
+            padding-top: 70px;
         }
         .sidebar a {
             padding: 16px 30px;
@@ -81,22 +118,21 @@
             display: block;
             font-weight: 700;
             transition: 0.3s;
-            border-left: 4px solid transparent;
+            border-left: 5px solid transparent;
             margin-bottom: 5px;
         }
         .sidebar a:hover, .sidebar a.active {
             color: var(--sakura-dark);
-            background: linear-gradient(90deg, rgba(248, 165, 194, 0.15) 0%, transparent 100%);
-            border-left: 4px solid var(--sakura-primary);
+            background: linear-gradient(90deg, rgba(255, 179, 198, 0.2) 0%, transparent 100%);
+            border-left: 5px solid var(--sakura-dark);
         }
         .sidebar .close-btn {
             position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 32px;
+            top: 15px;
+            right: 25px;
+            font-size: 36px;
             border-left: none;
             background: transparent;
-            padding: 5px 15px;
             color: var(--sakura-dark);
         }
 
@@ -104,99 +140,98 @@
         .container { 
             max-width: 500px; 
             margin: auto; 
-            padding: 30px 20px 40px;
+            padding: 40px 20px;
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
         
-        .avatar { 
-            width: 120px; height: 120px; 
-            border-radius: 50%; 
-            border: 5px solid rgba(255,255,255,0.8); 
-            box-shadow: 0 8px 25px rgba(248, 165, 194, 0.4); 
-            margin-bottom: 15px;
-            object-fit: cover;
+        h1 { 
+            font-size: 28px; 
+            font-weight: 900; 
+            margin: 0 0 30px 0; 
+            color: var(--sakura-dark); 
+            letter-spacing: 2px; 
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(255, 179, 198, 0.5);
         }
-        h1 { font-size: 24px; font-weight: 800; margin: 0 0 5px 0; color: var(--sakura-dark); letter-spacing: 0.5px; }
-        .bio-description { font-size: 14px; color: #9f878f; margin-bottom: 30px; font-weight: 500; }
 
         /* Tabs */
-        .tab-content { display: none; animation: fadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .tab-content { display: none; animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .tab-content.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 { 
-            font-size: 14px; color: #9f878f; margin: 0 0 20px 0; 
-            text-transform: uppercase; letter-spacing: 2px; 
-            font-weight: 700;
-        }
-
-        /* Nút bấm (Links) - Pill shape bo tròn hoàn toàn */
+        /* Nút bấm (Links) */
         a.btn { 
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-            text-decoration: none; padding: 16px; margin-bottom: 15px; 
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            text-decoration: none; padding: 18px; margin-bottom: 16px; 
             border-radius: 50px; font-weight: 700; font-size: 15px;
             background: var(--card-bg);
-            color: var(--sakura-dark);
-            border: 2px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--sakura-text);
+            border: 1px solid var(--card-border);
             box-shadow: var(--shadow-soft);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        a.btn:active, a.btn:hover {
-            transform: scale(0.98);
-            border-color: var(--sakura-primary);
-            background: #fff;
+        a.btn:active {
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.9);
+            border-color: var(--sakura-dark);
+            color: var(--sakura-dark);
         }
 
-        /* === TÍNH NĂNG ACCORDION CHO GÓC REVIEW === */
+        /* === GÓC REVIEW (Accordion) === */
         .review-card { 
             background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 24px; 
-            margin-bottom: 16px; 
+            margin-bottom: 18px; 
             box-shadow: var(--shadow-soft); 
             text-align: left; 
-            border: 2px solid var(--card-border);
+            border: 1px solid var(--card-border);
             overflow: hidden;
             transition: all 0.3s;
         }
         
         .review-card[open] {
-            border-color: rgba(248, 165, 194, 0.5);
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--sakura-primary);
         }
 
-        /* Tiêu đề (Tên sản phẩm) */
+        /* Tiêu đề Review */
         .review-title { 
-            padding: 18px 20px;
+            padding: 20px;
             font-size: 15px; 
             font-weight: 700; 
             color: var(--sakura-text); 
             cursor: pointer;
-            list-style: none; /* Ẩn mũi tên mặc định */
+            list-style: none;
             display: flex;
             justify-content: space-between;
             align-items: center;
             user-select: none;
         }
         
-        .review-title::-webkit-details-marker { display: none; } /* Ẩn mũi tên Safari */
+        .review-title::-webkit-details-marker { display: none; }
         
-        /* Mũi tên chỉ xuống tùy chỉnh */
+        /* Mũi tên hoa anh đào */
         .review-title::after {
             content: "🌸";
-            font-size: 12px;
-            transition: transform 0.4s ease;
-            filter: grayscale(0.5);
+            font-size: 14px;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            filter: drop-shadow(0 2px 4px rgba(215, 127, 161, 0.3));
         }
         .review-card[open] .review-title::after {
             transform: rotate(180deg);
-            filter: grayscale(0);
         }
 
-        /* Phần nội dung chi tiết ẩn bên trong */
+        /* Nội dung chi tiết Review */
         .review-body {
             padding: 0 20px 20px 20px;
             animation: slideDown 0.4s ease-out;
@@ -211,30 +246,34 @@
             font-size: 14px; 
             color: var(--sakura-text); 
             white-space: pre-line; 
-            line-height: 1.7; 
+            line-height: 1.8; 
             margin-bottom: 20px;
             padding-top: 15px;
-            border-top: 1px dashed rgba(248, 165, 194, 0.4);
+            border-top: 1px dashed var(--sakura-primary);
         }
         
         .btn-shopee { 
             display: block;
-            background: linear-gradient(135deg, #ff9eb5 0%, #f8a5c2 100%); 
+            background: linear-gradient(135deg, #ff9eb5 0%, #ff7597 100%); 
             color: #fff !important; 
             text-align: center; 
-            padding: 14px; 
+            padding: 15px; 
             border-radius: 16px;
             text-decoration: none;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(248, 165, 194, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 117, 151, 0.4);
             border: none;
+            transition: 0.2s;
         }
-        .btn-shopee:active { transform: scale(0.97); }
+        .btn-shopee:active { transform: scale(0.96); }
         
-        .loading { color: #bcaaa4; font-style: italic; font-weight: 500; }
+        .loading { color: #d77fa1; font-style: italic; font-weight: 500; font-size: 14px; }
     </style>
 </head>
 <body>
+    
+    <!-- Lớp phủ hiệu ứng hoa anh đào rơi -->
+    <div id="sakura-container"></div>
 
     <!-- SIDEBAR MENU -->
     <div id="mySidebar" class="sidebar">
@@ -254,34 +293,57 @@
     </div>
 
     <div class="container">
-        <!-- AVATAR (Luôn hiển thị) -->
-        <img src="https://via.placeholder.com/150/ffb7c5/ffffff?text=Avatar" alt="Shokaimono" class="avatar">
+        
+        <!-- Tên Hiển Thị Chính -->
         <h1>Shokaimono</h1>
-        <div class="bio-description">Góc nhỏ ngập tràn hoa anh đào 🌸</div>
         
         <!-- NỘI DUNG CÁC TAB -->
         <!-- TAB 1: BIO -->
         <div id="tab-bio" class="tab-content active">
-            <h2>🌸 Nơi mình hoạt động</h2>
-            <div id="bio-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="bio-list"><p class="loading">Đang nở hoa tải dữ liệu...</p></div>
         </div>
 
         <!-- TAB 2: TÀI LIỆU -->
         <div id="tab-files" class="tab-content">
-            <h2>💮 Tài liệu chia sẻ</h2>
-            <div id="file-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="file-list"><p class="loading">Đang nở hoa tải dữ liệu...</p></div>
         </div>
 
         <!-- TAB 3: REVIEW -->
         <div id="tab-reviews" class="tab-content">
-            <h2>🌺 Review sản phẩm</h2>
-            <div id="review-list"><p class="loading">Đang tải dữ liệu...</p></div>
+            <div id="review-list"><p class="loading">Đang nở hoa tải dữ liệu...</p></div>
         </div>
     </div>
 
     <script>
-        /* === 1. XỬ LÝ MENU & TABS === */
-        function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
+        /* === TẠO HIỆU ỨNG HOA ANH ĐÀO RƠI === */
+        function createSakura() {
+            const container = document.getElementById('sakura-container');
+            const numPetals = 35; // Số lượng cánh hoa
+            
+            for (let i = 0; i < numPetals; i++) {
+                let petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Random vị trí, kích thước và tốc độ cho từng cánh hoa
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.width = (Math.random() * 8 + 6) + 'px'; 
+                petal.style.height = (Math.random() * 10 + 8) + 'px'; 
+                
+                // Tốc độ rơi và độ lắc lư
+                let fallDuration = Math.random() * 6 + 5; 
+                let swayDuration = Math.random() * 3 + 2; 
+                petal.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+                
+                // Độ trễ ngẫu nhiên để hoa không rụng cùng 1 lúc
+                petal.style.animationDelay = `${Math.random() * 10}s`;
+                
+                container.appendChild(petal);
+            }
+        }
+        createSakura();
+
+        /* === XỬ LÝ MENU & TABS === */
+        function openMenu() { document.getElementById("mySidebar").style.width = "270px"; }
         function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
 
         function openTab(tabId) {
@@ -293,7 +355,7 @@
             closeMenu();
         }
 
-        /* === 2. XỬ LÝ ĐỒNG HỒ & NGÀY ÂM LỊCH === */
+        /* === XỬ LÝ ĐỒNG HỒ & NGÀY ÂM LỊCH === */
         function updateClock() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('vi-VN', { hour12: false });
@@ -313,7 +375,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        /* === 3. FETCH DỮ LIỆU TỪ GOOGLE SHEETS === */
+        /* === FETCH DỮ LIỆU TỪ GOOGLE SHEETS === */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
 
         fetch(API_URL)
