@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
-    <!-- Ưu tiên tải DNS Google để tăng tốc độ kết nối API -->
-    <link rel="preconnect" href="https://script.google.com">
     <style>
         /* Tông màu Neo-Brutalism Pastel */
         :root {
@@ -29,8 +27,7 @@
         }
 
         body { 
-            /* Sử dụng Font hệ thống siêu tốc */
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-main);
             color: var(--text-main); 
             min-height: 100vh;
@@ -232,12 +229,18 @@
 
         /* === GÓC REVIEW SẢN PHẨM === */
         .review-card { 
-            background: #fff; 
+            background: var(--btn-blue); /* Mặc định xanh */
             border-radius: 16px; margin-bottom: 18px; 
             border: 3px solid var(--border-color);
             box-shadow: 4px 4px 0px var(--shadow-color);
-            overflow: hidden; width: 100%; transition: 0.1s;
+            overflow: hidden; width: 100%; transition: 0.2s ease-in-out;
         }
+        
+        /* Xen kẽ màu giống nút */
+        .review-card:nth-child(odd) { background: var(--btn-pink); }
+        .review-card:nth-child(even) { background: var(--btn-blue); }
+
+        /* Đổi màu khi mở thẻ */
         .review-card[open] { background: var(--btn-yellow); }
 
         .review-title { 
@@ -322,7 +325,6 @@
             <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
         </div>
         
-        <!-- SỬ DỤNG KHUNG XƯƠNG (SKELETON) THAY VÌ CHỮ "ĐANG TẢI" -->
         <div id="tab-bio" class="tab-content active">
             <div id="bio-list">
                 <div class="skeleton"></div>
