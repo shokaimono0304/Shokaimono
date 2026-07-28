@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Shokaimono - Links & Reviews</title>
     <style>
-        /* Tông màu Sakura Hiện Đại & Rành Mạch */
+        /* Tông màu Neo-Brutalism Pastel (Dựa theo image_33be02.png) */
         :root {
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #fbe9ed 100%);
-            --sakura-primary: #ffb7c5; /* Màu viền chính */
-            --sakura-text: #5c3a43;    /* Màu chữ chính */
-            --sakura-dark: #b84b6b;    /* Màu nhấn (tiêu đề, icon) */
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --shadow-soft: 0 4px 15px rgba(184, 75, 107, 0.08);
+            --bg-main: #f0f8f9;       /* Nền xanh nhạt giống ảnh */
+            --border-color: #2d3436;  /* Viền đen xám đậm */
+            --shadow-color: #2d3436;  /* Bóng đổ cứng */
+            
+            --btn-pink: #ffe5ec;      /* Hồng nhạt */
+            --btn-blue: #e5f0ff;      /* Xanh dương nhạt */
+            --btn-yellow: #fff3cd;    /* Vàng nhạt */
+            
+            --text-main: #2d3436;
+            --text-title: #d63031;    /* Chữ tiêu đề màu đỏ/hồng đậm */
         }
 
         * {
@@ -23,221 +27,208 @@
         }
 
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            color: var(--sakura-text); 
+            font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; /* Font tròn trịa */
+            background: var(--bg-main);
+            color: var(--text-main); 
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Hiệu ứng hoa rơi */
-        #sakura-container {
+        /* --- BACKGROUND BONG BÓNG MỜ (Giống ảnh) --- */
+        #bg-container {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 0;
         }
-        .petal {
+        .bubble {
             position: absolute;
-            background: linear-gradient(135deg, #ffd3e0 0%, #ffb7c5 100%);
-            border-radius: 15px 0px 15px 0px;
-            opacity: 0.5;
-            animation: fall linear infinite, sway ease-in-out infinite alternate;
+            background: #d0e8e9; /* Màu chấm bi mờ */
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
         }
-        @keyframes fall {
-            0% { top: -10%; opacity: 0; }
-            10% { opacity: 0.5; }
-            80% { opacity: 0.5; }
-            100% { top: 110%; opacity: 0; }
-        }
-        @keyframes sway {
-            0% { transform: translateX(0) rotate(0deg); }
-            100% { transform: translateX(20px) rotate(45deg); }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) scale(1); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
-        /* Header (Menu & Clock) */
+        /* --- HEADER & MENU --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid #ffe1e8;
-            position: sticky;
-            top: 0;
+            padding: 15px 20px;
+            background: transparent;
+            position: relative;
             z-index: 100;
         }
 
         .menu-btn {
-            font-size: 26px;
+            font-size: 28px;
             cursor: pointer;
-            color: var(--sakura-dark);
-            padding-top: 4px;
+            color: var(--border-color);
+            background: #fff;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            width: 45px; height: 45px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 3px 3px 0px var(--shadow-color);
+            transition: 0.1s;
         }
+        .menu-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--shadow-color); }
 
-        /* Đồng hồ */
-        .datetime-box { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-        .time-text { font-size: 17px; font-weight: 700; color: var(--sakura-dark); }
-        .date-text { font-size: 11px; color: #8e737c; font-weight: 600; text-transform: uppercase; }
+        /* Đồng hồ khối hộp */
+        .datetime-box { 
+            display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
+        }
+        .time-block, .date-block {
+            background: #fff;
+            border: 3px solid var(--border-color);
+            border-radius: 12px;
+            padding: 4px 12px;
+            box-shadow: 3px 3px 0px var(--shadow-color);
+            text-align: center;
+        }
+        .time-block { color: var(--text-title); font-weight: 900; font-size: 16px; background: var(--btn-pink); }
+        .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
+        .date-lunar { font-size: 11px; color: var(--border-color); }
 
-        /* Sidebar (Menu trượt) */
+        /* --- SIDEBAR MENU (Khối cứng) --- */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0;
-            background: rgba(255, 250, 251, 0.98);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            overflow-x: hidden; transition: 0.3s;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.05); padding-top: 60px;
+            background: var(--bg-main);
+            border-right: 4px solid var(--border-color);
+            overflow-x: hidden; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            padding-top: 80px;
         }
         .sidebar a {
-            padding: 16px 25px; text-decoration: none; font-size: 15px;
-            color: var(--sakura-text); display: block; font-weight: 600;
-            border-left: 4px solid transparent; transition: 0.2s;
+            padding: 16px 25px; text-decoration: none; font-size: 16px;
+            color: var(--text-main); display: block; font-weight: 800;
+            border-bottom: 3px solid var(--border-color); transition: 0.1s;
+            margin: 0 15px 15px 15px; border: 3px solid var(--border-color);
+            border-radius: 12px; background: #fff; box-shadow: 3px 3px 0px var(--shadow-color);
         }
-        .sidebar a.active {
-            color: var(--sakura-dark); background: #fff2f5; border-left: 4px solid var(--sakura-dark);
+        .sidebar a:active, .sidebar a.active {
+            background: var(--btn-pink); transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--shadow-color);
         }
         .sidebar .close-btn {
-            position: absolute; top: 10px; right: 20px; font-size: 32px; color: var(--sakura-dark);
+            position: absolute; top: 15px; right: 15px; font-size: 32px; font-weight: 900;
+            border: none; box-shadow: none; background: transparent; padding: 0; margin: 0; width: auto;
         }
 
-        /* Container Chính - Thu hẹp lại để nút ôm sát chữ và bằng nhau */
+        /* --- CONTAINER CHÍNH --- */
         .container { 
-            width: 100%;
-            max-width: 360px; /* Thu nhỏ để fit vừa vặn */
-            margin: auto; 
-            padding: 30px 20px 50px 20px;
-            position: relative;
-            z-index: 10;
+            width: 100%; max-width: 400px; margin: auto; padding: 10px 20px 80px 20px;
+            position: relative; z-index: 10;
         }
         
+        /* Tiêu đề SHOKAIMONO (Giống nút HY HY WORKSPACE) */
         h1 { 
-            font-size: 26px; 
-            font-weight: 800; 
-            margin-bottom: 30px; 
-            text-align: center;
-            letter-spacing: 2px; 
-            text-transform: uppercase;
-            color: var(--sakura-dark);
+            font-size: 24px; font-weight: 900; margin-bottom: 25px; text-align: center;
+            text-transform: uppercase; color: var(--text-title);
+            background: var(--btn-pink);
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 4px 4px 0px var(--shadow-color);
         }
 
         /* Tabs */
-        .tab-content { display: none; animation: fadeIn 0.4s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* === CÁC NÚT BẤM (FB, TIKTOK, TÀI LIỆU) === */
+        /* === CÁC NÚT BẤM (Viền đen, bóng cứng) === */
         a.btn { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            text-decoration: none; 
-            padding: 14px 18px; /* Giảm độ phồng của nút */
-            margin-bottom: 12px; 
-            border-radius: 12px; /* Bo góc vuông vức hơn một chút */
-            background: var(--card-bg);
-            border: 1.5px solid var(--sakura-primary); /* Viền màu rõ nét */
-            box-shadow: var(--shadow-soft);
-            color: var(--sakura-text);
-            width: 100%; /* Đảm bảo tất cả các nút dài bằng nhau */
+            display: flex; justify-content: space-between; align-items: center; 
+            text-decoration: none; padding: 16px 20px; margin-bottom: 16px; 
+            border-radius: 14px; 
+            border: 3px solid var(--border-color); 
+            box-shadow: 4px 4px 0px var(--shadow-color);
+            color: var(--text-main);
+            width: 100%; 
+            transition: 0.1s;
+            background: var(--btn-blue); /* Mặc định xanh nhạt */
         }
+        /* Phối màu nút xen kẽ cho sinh động */
+        a.btn:nth-child(odd) { background: var(--btn-pink); }
+        a.btn:nth-child(even) { background: var(--btn-blue); }
+        
         a.btn:active {
-            background: #fff0f3;
-            border-color: var(--sakura-dark);
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px var(--shadow-color);
         }
 
-        .btn-text {
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-icon-right {
-            color: var(--sakura-primary);
-            font-size: 12px;
-            font-weight: bold;
-        }
+        .btn-text { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .btn-icon-right { color: var(--border-color); font-size: 16px; font-weight: 900; }
 
         /* === GÓC REVIEW SẢN PHẨM === */
         .review-card { 
-            background: var(--card-bg); 
-            border-radius: 14px; 
-            margin-bottom: 16px; 
-            box-shadow: var(--shadow-soft); 
-            border: 1.5px solid var(--sakura-primary);
-            overflow: hidden;
-            width: 100%;
+            background: #fff; 
+            border-radius: 16px; margin-bottom: 18px; 
+            border: 3px solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--shadow-color);
+            overflow: hidden; width: 100%; transition: 0.1s;
         }
-        .review-card[open] {
-            background: #ffffff;
-            border-color: var(--sakura-dark);
-        }
+        .review-card[open] { background: var(--btn-yellow); }
 
         .review-title { 
-            padding: 16px 18px;
-            font-size: 14px; 
-            font-weight: 600; 
-            color: var(--sakura-text); 
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 16px 20px; font-size: 15px; font-weight: 800; color: var(--text-main); 
+            cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center;
         }
         .review-title::-webkit-details-marker { display: none; }
-        .review-title::after {
-            content: "🌸";
-            font-size: 13px;
-            transition: transform 0.3s;
-        }
+        .review-title::after { content: "▼"; font-size: 12px; transition: 0.2s; }
         .review-card[open] .review-title::after { transform: rotate(180deg); }
 
-        .review-body {
-            padding: 0 18px 18px 18px;
-        }
-
+        .review-body { padding: 0 20px 20px 20px; }
         .review-content { 
-            font-size: 13.5px; 
-            color: #4a333a; 
-            white-space: pre-line; 
-            line-height: 1.6; 
-            margin-bottom: 16px;
-            padding-top: 12px;
-            border-top: 1px dashed var(--sakura-primary);
+            font-size: 14px; font-weight: 600; white-space: pre-line; line-height: 1.6; 
+            margin-bottom: 16px; padding-top: 12px; border-top: 2px dashed var(--border-color);
         }
         
         .btn-shopee { 
-            display: block;
-            background: var(--sakura-dark); 
-            color: #fff !important; 
-            text-align: center; 
-            padding: 12px; 
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 13.5px;
-            border: none;
+            display: block; background: var(--text-title); color: #fff !important; 
+            text-align: center; padding: 14px; border-radius: 12px; text-decoration: none;
+            font-weight: 800; font-size: 14px;
+            border: 3px solid var(--border-color);
+            box-shadow: 3px 3px 0px var(--border-color); transition: 0.1s;
         }
-        .btn-shopee:active { opacity: 0.8; }
+        .btn-shopee:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border-color); }
         
-        .loading { 
-            text-align: center;
-            color: var(--sakura-dark); 
-            font-style: italic; 
-            font-size: 13px; 
-            margin-top: 20px;
+        .loading { text-align: center; color: var(--text-main); font-weight: 800; font-size: 14px; margin-top: 20px; }
+
+        /* === NÚT VỀ ĐẦU TRANG (SCROLL TO TOP) === */
+        #scrollTopBtn {
+            display: none; 
+            position: fixed; bottom: 25px; right: 20px; z-index: 999;
+            width: 50px; height: 50px;
+            font-size: 20px; font-weight: 900;
+            background: var(--btn-yellow);
+            color: var(--border-color);
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            box-shadow: 3px 3px 0px var(--shadow-color);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        #scrollTopBtn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px var(--shadow-color);
         }
     </style>
 </head>
 <body>
     
-    <div id="sakura-container"></div>
+    <!-- Lớp bong bóng bay lơ lửng -->
+    <div id="bg-container"></div>
+
+    <!-- Nút Lên Đầu Trang -->
+    <button id="scrollTopBtn" onclick="scrollToTop()">▲</button>
 
     <!-- SIDEBAR MENU -->
     <div id="mySidebar" class="sidebar">
@@ -247,18 +238,20 @@
         <a href="javascript:void(0)" onclick="openTab('tab-reviews')" class="menu-item">🌺 Góc Review</a>
     </div>
 
-    <!-- HEADER: Menu 3 gạch & Đồng hồ 3 dòng -->
+    <!-- HEADER: Menu 3 gạch & Đồng hồ -->
     <div class="header">
         <div class="menu-btn" onclick="openMenu()">☰</div>
         <div class="datetime-box">
-            <div class="time-text" id="clock-time">--:--:--</div>
-            <div class="date-text" id="clock-date-solar">Dương: Đang tải...</div>
-            <div class="date-text" id="clock-date-lunar">Âm: Đang tải...</div>
+            <div class="time-block" id="clock-time">--:--:--</div>
+            <div class="date-block">
+                <div id="clock-date-solar">Dương: ...</div>
+                <div class="date-lunar" id="clock-date-lunar">(Âm: ...)</div>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        <h1>Shokaimono</h1>
+        <h1>🌸 Shokaimono 🌸</h1>
         
         <!-- NỘI DUNG CÁC TAB -->
         <div id="tab-bio" class="tab-content active">
@@ -275,24 +268,38 @@
     </div>
 
     <script>
-        /* TẠO HOA RƠI */
-        function createSakura() {
-            const container = document.getElementById('sakura-container');
-            for (let i = 0; i < 20; i++) {
-                let petal = document.createElement('div');
-                petal.classList.add('petal');
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.width = (Math.random() * 6 + 5) + 'px'; 
-                petal.style.height = (Math.random() * 8 + 6) + 'px'; 
-                petal.style.animationDuration = `${Math.random() * 7 + 6}s, ${Math.random() * 3 + 2}s`;
-                petal.style.animationDelay = `${Math.random() * 10}s`;
-                container.appendChild(petal);
+        /* TẠO BACKGROUND BONG BÓNG */
+        function createBubbles() {
+            const container = document.getElementById('bg-container');
+            for (let i = 0; i < 15; i++) {
+                let bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                let size = Math.random() * 20 + 10;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                bubble.style.animationDelay = (Math.random() * 10) + 's';
+                container.appendChild(bubble);
             }
         }
-        createSakura();
+        createBubbles();
+
+        /* XỬ LÝ NÚT CUỘN LÊN ĐẦU TRANG */
+        window.onscroll = function() {
+            let btn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         /* XỬ LÝ MENU */
-        function openMenu() { document.getElementById("mySidebar").style.width = "250px"; }
+        function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
         function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -302,24 +309,23 @@
             closeMenu();
         }
 
-        /* ĐỒNG HỒ & ĐỊNH DẠNG NGÀY ÂM/DƯƠNG */
+        /* ĐỒNG HỒ & CẮT CHUẨN NGÀY ÂM */
         function updateClock() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
             
-            // Ngày Dương
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            document.getElementById('clock-date-solar').innerText = `Dương: ${dateSolar}`;
+            document.getElementById('clock-date-solar').innerText = `${dateSolar}`;
             
-            // Ngày Âm (Thay thế dấu - thành dấu /)
+            // Lấy Lịch Âm và chỉ cắt đúng phần Ngày/Tháng, vứt bỏ năm (43...)
             try {
-                const formatter = new Intl.DateTimeFormat('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', calendar: 'chinese' });
-                let rawLunar = formatter.format(now);
-                // Đổi dấu gạch ngang hoặc dấu chấm thành dấu gạch chéo
-                let dateLunar = rawLunar.replace(/[-.]/g, '/'); 
-                document.getElementById('clock-date-lunar').innerText = `Âm: ${dateLunar}`;
+                const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
+                let rawLunar = formatter.format(now); // Thường ra "14/6" hoặc "14/6/43"
+                let lunarParts = rawLunar.split(/[\/\-.]/); // Tách chuỗi bằng dấu / hoặc -
+                let dateLunar = `${lunarParts[0]}/${lunarParts[1]}`; // Chỉ ghép ngày và tháng lại
+                document.getElementById('clock-date-lunar').innerText = `(Âm: ${dateLunar})`;
             } catch (e) {
-                document.getElementById('clock-date-lunar').innerText = `Âm: N/A`;
+                document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`;
             }
         }
         setInterval(updateClock, 1000);
@@ -336,20 +342,20 @@
                     bioContainer.innerHTML = data.bio.map(row => 
                         `<a href="${row[1]}" class="btn" target="_blank">
                             <span class="btn-text">🌸 ${row[0]}</span>
-                            <span class="btn-icon-right">❯</span>
+                            <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { bioContainer.innerHTML = '<p class="loading">Chưa có liên kết nào</p>'; }
+                } else { bioContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
 
                 const fileContainer = document.getElementById('file-list');
                 if (data.files && data.files.length > 0) {
                     fileContainer.innerHTML = data.files.map(row => 
                         `<a href="${row[1]}" class="btn" target="_blank">
                             <span class="btn-text">💮 ${row[0]}</span>
-                            <span class="btn-icon-right">❯</span>
+                            <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { fileContainer.innerHTML = '<p class="loading">Chưa có tài liệu nào</p>'; }
+                } else { fileContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
 
                 const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
@@ -362,10 +368,10 @@
                             </div>
                         </details>`
                     ).join('');
-                } else { reviewContainer.innerHTML = '<p class="loading">Chưa có review nào</p>'; }
+                } else { reviewContainer.innerHTML = '<p class="loading">Đang tải dữ liệu...</p>'; }
             })
             .catch(error => {
-                console.error("Lỗi tải dữ liệu:", error);
+                console.error("Lỗi:", error);
                 document.querySelectorAll('.loading').forEach(el => el.innerText = "Lỗi khi tải dữ liệu.");
             });
     </script>
