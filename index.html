@@ -104,6 +104,24 @@
         .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
         .date-lunar { font-size: 11px; color: var(--border-color); }
 
+        /* === BOX TỪ VỰNG TIẾNG NHẬT === */
+        .vocab-block {
+            background: #fff; border: 3px solid var(--border-color);
+            border-radius: 12px; padding: 5px; display: flex; align-items: center;
+            box-shadow: 3px 3px 0px var(--shadow-color); margin-top: 2px;
+            width: 155px; justify-content: space-between; user-select: none;
+        }
+        .vocab-btn {
+            cursor: pointer; padding: 5px; font-size: 12px; color: var(--border-color); 
+            font-weight: 900; transition: 0.1s; background: var(--btn-yellow); border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+        .vocab-btn:active { transform: scale(0.9); }
+        .vocab-content { text-align: center; flex: 1; padding: 0 4px; }
+        .vocab-label { font-size: 9px; font-weight: 900; color: var(--text-title); text-transform: uppercase; margin-bottom: 2px; }
+        .vocab-word { font-size: 12px; font-weight: 900; color: #0984e3; line-height: 1.2; }
+        .vocab-mean { font-size: 10px; font-weight: 700; color: var(--border-color); margin-top: 2px; }
+
         /* --- SIDEBAR MENU --- */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0;
@@ -166,7 +184,7 @@
         .btn-text { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         .btn-icon-right { color: var(--border-color); font-size: 16px; font-weight: 900; }
 
-        /* === THANH LỌC VUỐT NGANG (CHỈ CÓ DANH MỤC) === */
+        /* === THANH LỌC VUỐT NGANG === */
         .filter-scroll-container {
             display: flex; align-items: center; gap: 10px; overflow-x: auto;
             padding-bottom: 15px; margin-bottom: 10px;
@@ -254,7 +272,7 @@
         }
         .lightbox-img {
             max-width: 95%; max-height: 90vh; object-fit: contain; border-radius: 8px;
-            transition: transform 0.1s ease-out; touch-action: none; /* Cần thiết để vuốt mượt */
+            transition: transform 0.1s ease-out; touch-action: none;
         }
         .close-lightbox {
             position: absolute; top: 20px; right: 20px; color: #fff; font-size: 35px; font-weight: 900;
@@ -274,7 +292,7 @@
     
     <!-- AUDIO HTML (Dành cho link .mp3) -->
     <audio id="html-audio" loop style="display:none;"></audio>
-    <!-- Vùng chứa YouTube (https://music.youtube.com/watch?v=CoSc0Qqd5L0&si=pLuMjBbsFw26iH-f) -->
+    <!-- Vùng chứa YouTube -->
     <div id="ytplayer" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
 
     <div id="mySidebar" class="sidebar">
@@ -292,6 +310,18 @@
                 <div id="clock-date-solar">Thứ... <br>Dương: ...</div>
                 <div class="date-lunar" id="clock-date-lunar">(Âm: ...)</div>
             </div>
+            
+            <!-- GÓC TỪ VỰNG TIẾNG NHẬT -->
+            <div class="vocab-block">
+                <div class="vocab-btn" onclick="changeVocab(-1)">◀</div>
+                <div class="vocab-content">
+                    <div class="vocab-label" id="vocab-label">Hôm nay</div>
+                    <div class="vocab-word" id="vocab-word">桜 (Sakura)</div>
+                    <div class="vocab-mean" id="vocab-mean">Hoa anh đào</div>
+                </div>
+                <div class="vocab-btn" onclick="changeVocab(1)">▶</div>
+            </div>
+            
         </div>
     </div>
 
@@ -334,43 +364,100 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         /* =========================================
+           TỪ VỰNG TIẾNG NHẬT MỖI NGÀY
+        ========================================= */
+        const vocabList = [
+            { w: "桜 (Sakura)", m: "Hoa anh đào" },
+            { w: "猫 (Neko)", m: "Con mèo" },
+            { w: "海 (Umi)", m: "Bãi biển" },
+            { w: "空 (Sora)", m: "Bầu trời" },
+            { w: "星 (Hoshi)", m: "Ngôi sao" },
+            { w: "月 (Tsuki)", m: "Mặt trăng" },
+            { w: "太陽 (Taiyou)", m: "Mặt trời" },
+            { w: "水 (Mizu)", m: "Nước trong veo" },
+            { w: "風 (Kaze)", m: "Làn gió" },
+            { w: "雪 (Yuki)", m: "Tuyết rơi" },
+            { w: "春 (Haru)", m: "Mùa xuân" },
+            { w: "夏 (Natsu)", m: "Mùa hè" },
+            { w: "秋 (Aki)", m: "Mùa thu" },
+            { w: "冬 (Fuyu)", m: "Mùa đông" },
+            { w: "愛 (Ai)", m: "Tình yêu" },
+            { w: "夢 (Yume)", m: "Giấc mơ" },
+            { w: "笑顔 (Egao)", m: "Nụ cười" },
+            { w: "希望 (Kibou)", m: "Sự hy vọng" },
+            { w: "家族 (Kazoku)", m: "Gia đình" },
+            { w: "友達 (Tomodachi)", m: "Bạn bè" },
+            { w: "時間 (Jikan)", m: "Thời gian" },
+            { w: "未来 (Mirai)", m: "Tương lai" },
+            { w: "平和 (Heiwa)", m: "Hòa bình" },
+            { w: "森 (Mori)", m: "Khu rừng" },
+            { w: "花 (Hana)", m: "Bông hoa" }
+        ];
+
+        let vocabOffset = 0; // 0 = Hôm nay, -1 = Hôm qua, 1 = Ngày mai
+
+        function renderVocab() {
+            const today = new Date();
+            today.setDate(today.getDate() + vocabOffset);
+            
+            // Tính số thứ tự ngày cố định để mỗi ngày luôn ra đúng 1 từ đó
+            const baseTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+            const dayIndex = Math.floor(baseTime / (1000 * 60 * 60 * 24));
+            
+            // Lấy từ vựng tương ứng (dùng % để lặp lại khi hết danh sách)
+            const wordObj = vocabList[dayIndex % vocabList.length];
+
+            // Cập nhật nhãn thời gian
+            let labelStr = "Hôm nay";
+            if (vocabOffset === -1) labelStr = "Hôm qua";
+            else if (vocabOffset === -2) labelStr = "Hôm kia";
+            else if (vocabOffset === 1) labelStr = "Ngày mai";
+            else if (vocabOffset < -2) labelStr = Math.abs(vocabOffset) + " ngày trước";
+            else if (vocabOffset > 1) labelStr = vocabOffset + " ngày sau";
+
+            document.getElementById('vocab-label').innerText = labelStr;
+            document.getElementById('vocab-word').innerText = wordObj.w;
+            document.getElementById('vocab-mean').innerText = wordObj.m;
+        }
+
+        function changeVocab(delta) {
+            vocabOffset += delta;
+            renderVocab();
+        }
+        
+        // Chạy lần đầu để load từ vựng hôm nay
+        renderVocab();
+
+
+        /* =========================================
            CÀI ĐẶT NHẠC (HYBRID YOUTUBE & MP3)
         ========================================= */
-        // Thay link nhạc của bạn vào đây. 
-        // CÓ THỂ LÀ: Link YouTube, ID Video YouTube, hoặc Link .mp3 trực tiếp!
-        const MUSIC_SOURCE = "hhttps://music.youtube.com/watch?v=CoSc0Qqd5L0&si=Hb4BXCbEJcp4Vu3I"; 
+        const MUSIC_SOURCE = "https://music.youtube.com/watch?v=CoSc0Qqd5L0&si=Hb4BXCbEJcp4Vu3I"; 
         
-        let playerType = 'none'; // 'youtube' hoặc 'audio'
+        let playerType = 'none'; 
         let ytPlayer;
         let isPlaying = false;
         let userInteracted = false;
         const htmlAudio = document.getElementById('html-audio');
         const musicBtn = document.getElementById('musicToggleBtn');
 
-        // Hàm phân tích link Youtube
         function getYTVideoId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
-        // Khởi tạo hệ thống nhạc khi web tải xong
         function initMusicSystem() {
             if (MUSIC_SOURCE.includes('.mp3') || MUSIC_SOURCE.includes('.wav') || (!MUSIC_SOURCE.includes('youtu') && MUSIC_SOURCE.includes('http'))) {
                 playerType = 'audio';
                 htmlAudio.src = MUSIC_SOURCE;
-                
                 htmlAudio.onplay = () => { isPlaying = true; musicBtn.innerText = "🎵"; };
                 htmlAudio.onpause = () => { isPlaying = false; musicBtn.innerText = "🔇"; };
             } 
-            else {
-                playerType = 'youtube';
-                // Đợi API Youtube load xong sẽ gọi onYouTubeIframeAPIReady()
-            }
+            else { playerType = 'youtube'; }
         }
         initMusicSystem();
 
-        // Khởi tạo Youtube nếu nguồn là Youtube
         function onYouTubeIframeAPIReady() {
             if (playerType !== 'youtube') return;
             
@@ -398,9 +485,8 @@
             userInteracted = true; 
         }
 
-        // Bắt chạm đầu tiên để lách luật chặn tự động phát
         document.body.addEventListener('click', function(e) {
-            if (!userInteracted && e.target.id !== 'musicToggleBtn') {
+            if (!userInteracted && e.target.id !== 'musicToggleBtn' && !e.target.classList.contains('vocab-btn')) {
                 if (playerType === 'audio' && htmlAudio.paused) {
                     htmlAudio.play().catch(e => console.log("Trình duyệt chặn autoplay"));
                 } else if (playerType === 'youtube' && ytPlayer && typeof ytPlayer.playVideo === 'function' && ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
@@ -427,14 +513,12 @@
         }
 
         function closeLightbox(e, force = false) {
-            // Đóng nếu click ra ngoài ảnh hoặc bấm nút X
             if (force || e.target === lightbox || e.target.classList.contains('lightbox-img-wrapper')) {
                 lightbox.style.display = 'none';
                 lightboxImg.src = '';
             }
         }
 
-        // Xử lý dùng 2 ngón tay thu phóng ảnh
         lightboxImg.addEventListener('touchstart', (e) => {
             if (e.touches.length === 2) {
                 initialDistance = Math.hypot(
@@ -446,7 +530,7 @@
 
         lightboxImg.addEventListener('touchmove', (e) => {
             if (e.touches.length === 2 && initialDistance) {
-                e.preventDefault(); // Chặn cuộn trang
+                e.preventDefault();
                 const currentDistance = Math.hypot(
                     e.touches[0].pageX - e.touches[1].pageX,
                     e.touches[0].pageY - e.touches[1].pageY
@@ -455,12 +539,10 @@
                 let scaleChange = currentDistance / initialDistance;
                 let newScale = currentScale * scaleChange;
                 
-                // Giới hạn zoom từ 1x đến 4x
                 if (newScale < 1) newScale = 1;
                 if (newScale > 4) newScale = 4;
                 
                 lightboxImg.style.transform = `scale(${newScale})`;
-                
                 initialDistance = currentDistance;
                 currentScale = newScale;
             }
@@ -580,7 +662,6 @@
             }
         }
 
-        /* TẠO THANH DANH MỤC */
         function renderCategoryDropdown() {
             const filterContainer = document.getElementById('filter-container');
             const categories = new Set();
@@ -613,7 +694,6 @@
             return url; 
         }
 
-        /* HIỂN THỊ REVIEW */
         function renderReviews(categoryName) {
             const reviewContainer = document.getElementById('review-list');
             const filteredData = allReviewsData.filter(row => {
@@ -634,7 +714,6 @@
                 let imageHtml = '';
                 let imgUrl = getDirectImageUrl(row[7]); 
                 if (imgUrl !== '') {
-                    // Thêm sự kiện onclick để mở Lightbox
                     imageHtml = `<img src="${imgUrl}" alt="Ảnh sản phẩm" class="review-img" loading="lazy" onclick="openLightbox('${imgUrl}')">`;
                 }
 
