@@ -252,8 +252,9 @@
     
     <!-- Nút điều khiển nhạc -->
     <button id="musicToggleBtn" class="float-btn" onclick="toggleMusic()">🔇</button>
-    <!-- THẺ AUDIO: Đổi nhạc tại thuộc tính src -->
-    <audio id="bg-music" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"></audio>
+    
+    <!-- Vùng chứa YouTube Ẩn -->
+    <div id="ytplayer" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
 
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
@@ -292,7 +293,7 @@
         </div>
 
         <div id="tab-reviews" class="tab-content">
-            <!-- THANH LỌC DANH MỤC DẠNG VUỐT NGANG (Chỉ có chữ) -->
+            <!-- THANH LỌC DANH MỤC DẠNG VUỐT NGANG -->
             <div class="filter-scroll-container" id="filter-container" style="display:none;">
                 <!-- Nội dung lọc sẽ chèn tự động vào đây -->
             </div>
@@ -306,36 +307,83 @@
         </div>
     </div>
 
+    <!-- Tải thư viện API của YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // --- CHỨC NĂNG NHẠC NỀN ---
-        const music = document.getElementById('bg-music');
-        const musicBtn = document.getElementById('musicToggleBtn');
-        let musicStarted = false;
+        /* =========================================
+           CÀI ĐẶT NHẠC YOUTUBE
+        ========================================= */
+        // Thay ID video YouTube bạn muốn vào đây:
+        // Ví dụ link youtube: https://www.youtube.com/watch?v=jfKfPfyJRdk ---> ID là: jfKfPfyJRdk
+        const YOUTUBE_VIDEO_ID = "jfKfPfyJRdk"; // Đang để mặc định là nhạc Lofi Girl
 
-        function toggleMusic() {
-            if (music.paused) {
-                music.play();
+        let player;
+        let isPlaying = false;
+        let userInteracted = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('ytplayer', {
+                height: '0',
+                width: '0',
+                videoId: YOUTUBE_VIDEO_ID,
+                playerVars: {
+                    'autoplay': 1, 
+                    'loop': 1, 
+                    'playlist': YOUTUBE_VIDEO_ID,
+                    'controls': 0,
+                    'showinfo': 0,
+                    'autohide': 1,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Cố gắng tự động phát ngay khi web load xong
+            event.target.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            const musicBtn = document.getElementById('musicToggleBtn');
+            if (event.data == YT.PlayerState.PLAYING) {
                 musicBtn.innerText = "🎵";
-            } else {
-                music.pause();
+                isPlaying = true;
+            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
                 musicBtn.innerText = "🔇";
+                isPlaying = false;
             }
         }
 
-        // Tự động bật nhạc khi người dùng chạm hoặc click lần đầu vào trang
-        document.body.addEventListener('click', function() {
-            if (!musicStarted) {
-                music.play().then(() => {
-                    musicBtn.innerText = "🎵";
-                    musicStarted = true;
-                }).catch(e => {
-                    console.log("Trình duyệt chặn tự động phát nhạc.");
-                });
+        function toggleMusic() {
+            if (player && typeof player.getPlayerState === 'function') {
+                if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                } else {
+                    player.playVideo();
+                }
+                userInteracted = true; // Đã chủ động bấm thì đánh dấu luôn
             }
-        }, { once: true });
+        }
+
+        // Bắt sự kiện chạm/click đầu tiên để lách luật chặn tự động phát của trình duyệt
+        document.body.addEventListener('click', function(e) {
+            // Nếu người dùng chưa tương tác và không bấm trực tiếp vào nút tắt/bật nhạc
+            if (!userInteracted && e.target.id !== 'musicToggleBtn') {
+                if (player && typeof player.playVideo === 'function' && player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                    player.playVideo();
+                }
+                userInteracted = true;
+            }
+        });
 
 
-        // --- HIỆU ỨNG HOA RƠI ---
+        /* =========================================
+           HIỆU ỨNG & GIAO DIỆN
+        ========================================= */
         function createSakura() {
             const container = document.getElementById('bg-container');
             const day = new Date().getDay(); 
@@ -409,7 +457,9 @@
         function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
 
-        /* FETCH DỮ LIỆU TỪ GOOGLE SHEET */
+        /* =========================================
+           FETCH DỮ LIỆU TỪ GOOGLE SHEET
+        ========================================= */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
         let allReviewsData = [];
 
@@ -445,7 +495,7 @@
             }
         }
 
-        /* LÀM THANH LỌC VUỐT NGANG (Chỉ hiển thị Tất Cả và các danh mục) */
+        /* TẠO THANH DANH MỤC */
         function renderCategoryDropdown() {
             const filterContainer = document.getElementById('filter-container');
             
@@ -464,7 +514,6 @@
                 filterContainer.style.display = 'flex';
             }
             
-            // Xóa nút Lọc/Kính lúp, chỉ để lại [Tất cả] và các [Danh mục]
             let html = `<div class="filter-chip active" onclick="filterByCategory('Tất cả', this)">🌸 Tất cả</div>`;
             categories.forEach(cat => {
                 html += `<div class="filter-chip" onclick="filterByCategory('${cat}', this)">${cat}</div>`;
@@ -476,14 +525,23 @@
         function filterByCategory(categoryName, itemElement) {
             document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
             itemElement.classList.add('active');
-            
-            // Kéo thẻ được chọn vào giữa màn hình cho đẹp mắt
             itemElement.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-            
             renderReviews(categoryName);
         }
 
-        /* HIỂN THỊ REVIEW (DẠNG MỞ RỘNG BẰNG DETAILS-SUMMARY) */
+        /* HÀM CHUYỂN ĐỔI LINK GOOGLE DRIVE SANG LINK ẢNH TRỰC TIẾP */
+        function getDirectImageUrl(url) {
+            if (!url) return '';
+            url = String(url).trim();
+            // Nếu là link Google Drive, chuyển thành định dạng hiển thị ảnh được
+            let driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+            if (url.includes('drive.google.com') && driveMatch) {
+                return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+            }
+            return url; // Nếu không phải Google Drive thì giữ nguyên
+        }
+
+        /* HIỂN THỊ REVIEW */
         function renderReviews(categoryName) {
             const reviewContainer = document.getElementById('review-list');
             
@@ -503,14 +561,14 @@
                 let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
                 let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
                 
-                // Nơi hiển thị hình ảnh (nếu có)
+                // Sử dụng hàm xử lý link ảnh ở trên để sửa lỗi link Google Drive
                 let imageHtml = '';
-                let imgUrl = row[7];
-                if (imgUrl !== undefined && imgUrl !== null && String(imgUrl).trim() !== '') {
-                    imageHtml = `<img src="${String(imgUrl).trim()}" alt="Ảnh sản phẩm" class="review-img" loading="lazy">`;
+                let imgUrl = getDirectImageUrl(row[7]); 
+                if (imgUrl !== '') {
+                    imageHtml = `<img src="${imgUrl}" alt="Ảnh sản phẩm" class="review-img" loading="lazy">`;
                 }
 
-                // Tag danh mục kế bên nút mũi tên
+                // Tag danh mục
                 let catBadgeHtml = '';
                 if (row[6] && String(row[6]).trim() !== '') {
                     catBadgeHtml = `<span class="cat-badge">${String(row[6]).trim()}</span>`;
