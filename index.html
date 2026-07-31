@@ -185,7 +185,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* === HIỆU ỨNG SKELETON LOADING (TỐI ƯU CẢM GIÁC CHỜ ĐỢI) === */
+        /* === HIỆU ỨNG SKELETON LOADING === */
         .skeleton {
             background: #e2e8f0;
             background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
@@ -227,20 +227,56 @@
         .btn-text { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         .btn-icon-right { color: var(--border-color); font-size: 16px; font-weight: 900; }
 
-        /* === GÓC REVIEW SẢN PHẨM === */
+        /* === GÓC REVIEW DANH MỤC & SẢN PHẨM === */
+        .category-filters {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+            scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+        }
+        
+        .category-filters::-webkit-scrollbar { 
+            display: none; /* Ẩn thanh cuộn trên Chrome/Safari */
+        }
+
+        .cat-btn {
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 3px solid var(--border-color);
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            background: #fff;
+            box-shadow: 3px 3px 0px var(--shadow-color);
+            transition: 0.1s;
+            color: var(--text-main);
+        }
+
+        .cat-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px var(--shadow-color);
+        }
+
+        .cat-btn.active {
+            background: var(--btn-yellow);
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--shadow-color);
+            color: var(--text-title);
+        }
+
         .review-card { 
-            background: var(--btn-blue); /* Mặc định xanh */
+            background: var(--btn-blue); 
             border-radius: 16px; margin-bottom: 18px; 
             border: 3px solid var(--border-color);
             box-shadow: 4px 4px 0px var(--shadow-color);
             overflow: hidden; width: 100%; transition: 0.2s ease-in-out;
         }
         
-        /* Xen kẽ màu giống nút */
         .review-card:nth-child(odd) { background: var(--btn-pink); }
         .review-card:nth-child(even) { background: var(--btn-blue); }
-
-        /* Đổi màu khi mở thẻ */
         .review-card[open] { background: var(--btn-yellow); }
 
         .review-title { 
@@ -341,6 +377,12 @@
         </div>
 
         <div id="tab-reviews" class="tab-content">
+            <!-- Khu vực lọc danh mục trượt ngang -->
+            <div id="category-filters" class="category-filters">
+                <!-- Nút danh mục sẽ tự động chèn vào đây -->
+            </div>
+
+            <!-- Danh sách review -->
             <div id="review-list">
                 <div class="skeleton skeleton-large"></div>
                 <div class="skeleton skeleton-large"></div>
@@ -446,10 +488,12 @@
         const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
         function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
-        /* FETCH DỮ LIỆU TỪ GOOGLE SHEETS (DÙNG ASYNC ĐỂ KHÔNG CHẶN GIAO DIỆN) */
+        /* --- XỬ LÝ FETCH API VÀ RENDER SẢN PHẨM --- */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
+        
+        // Lưu trữ dữ liệu review
+        let allReviewsData = [];
 
-        // Hàm gọi API chạy nền
         async function loadData() {
             try {
                 const response = await fetch(API_URL);
@@ -464,7 +508,7 @@
                             <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { bioContainer.innerHTML = '<p style="text-align:center">Chưa có liên kết nào</p>'; }
+                } else { bioContainer.innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có liên kết nào</p>'; }
 
                 // Đổ dữ liệu Tab TÀI LIỆU
                 const fileContainer = document.getElementById('file-list');
@@ -475,39 +519,100 @@
                             <span class="btn-icon-right">▼</span>
                         </a>`
                     ).join('');
-                } else { fileContainer.innerHTML = '<p style="text-align:center">Chưa có tài liệu nào</p>'; }
+                } else { fileContainer.innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có tài liệu nào</p>'; }
 
                 // Đổ dữ liệu Tab REVIEW
-                const reviewContainer = document.getElementById('review-list');
                 if (data.reviews && data.reviews.length > 0) {
-                    reviewContainer.innerHTML = data.reviews.map(row => {
-                        let shopeeBtn = row[3] ? `<a href="${row[3]}" class="btn-shop btn-shopee" target="_blank">🛒 Shopee</a>` : '';
-                        let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
-                        let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
-                        
-                        return `<details class="review-card">
-                            <summary class="review-title">${getRandomIcon()} ${row[1]}</summary>
-                            <div class="review-body">
-                                <div class="review-content">${row[2]}</div>
-                                <div class="shop-buttons">
-                                    ${shopeeBtn}
-                                    ${lazadaBtn}
-                                    ${tiktokBtn}
-                                </div>
-                            </div>
-                        </details>`;
-                    }).join('');
-                } else { reviewContainer.innerHTML = '<p style="text-align:center">Chưa có review nào</p>'; }
+                    allReviewsData = data.reviews;
+                    renderCategoryButtons();
+                    renderReviews("Tất cả"); // Mặc định hiển thị tất cả
+                } else { 
+                    document.getElementById('review-list').innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có bài review nào</p>'; 
+                    document.getElementById('category-filters').style.display = 'none';
+                }
                 
             } catch (error) {
                 console.error("Lỗi:", error);
-                document.getElementById('bio-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
-                document.getElementById('file-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
-                document.getElementById('review-list').innerHTML = '<p style="text-align:center; color:red">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
+                const errorMsg = '<p style="text-align:center; color:red; font-weight: bold;">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
+                document.getElementById('bio-list').innerHTML = errorMsg;
+                document.getElementById('file-list').innerHTML = errorMsg;
+                document.getElementById('review-list').innerHTML = errorMsg;
             }
         }
-        
-        // Gọi hàm tải dữ liệu ngay khi vừa load xong giao diện nền
+
+        // Tạo các nút danh mục từ Cột 7 (row[6]) trong Sheet
+        function renderCategoryButtons() {
+            const filterContainer = document.getElementById('category-filters');
+            
+            // Lấy ra các danh mục duy nhất, bỏ qua ô trống
+            const categories = new Set();
+            allReviewsData.forEach(row => {
+                if (row[6] && row[6].trim() !== '') {
+                    categories.add(row[6].trim());
+                }
+            });
+
+            // Nếu không có danh mục nào thì ẩn luôn thanh lọc
+            if (categories.size === 0) {
+                filterContainer.style.display = 'none';
+                return;
+            }
+            
+            let html = `<button class="cat-btn active" onclick="filterByCategory('Tất cả', this)">🌸 Tất cả</button>`;
+            categories.forEach(cat => {
+                html += `<button class="cat-btn" onclick="filterByCategory('${cat}', this)">${cat}</button>`;
+            });
+            
+            filterContainer.innerHTML = html;
+        }
+
+        // Lọc hiển thị khi bấm vào Nút danh mục
+        function filterByCategory(categoryName, btnElement) {
+            // Đổi màu nút được chọn
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            // Gọi hàm render
+            renderReviews(categoryName);
+        }
+
+        // Hiển thị danh sách review ra màn hình
+        function renderReviews(categoryName) {
+            const reviewContainer = document.getElementById('review-list');
+            
+            // Lọc dữ liệu
+            const filteredData = allReviewsData.filter(row => {
+                if (categoryName === "Tất cả") return true;
+                const rowCat = row[6] ? row[6].trim() : "";
+                return rowCat === categoryName;
+            });
+
+            if (filteredData.length === 0) {
+                reviewContainer.innerHTML = '<p style="text-align:center; font-weight:800; padding:20px;">🥲 Chưa có bài review nào cho mục này...</p>';
+                return;
+            }
+
+            // In ra các thẻ gập mở
+            reviewContainer.innerHTML = filteredData.map(row => {
+                let shopeeBtn = row[3] ? `<a href="${row[3]}" class="btn-shop btn-shopee" target="_blank">🛒 Shopee</a>` : '';
+                let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
+                let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
+                
+                return `<details class="review-card">
+                    <summary class="review-title">${getRandomIcon()} ${row[1]}</summary>
+                    <div class="review-body">
+                        <div class="review-content">${row[2]}</div>
+                        <div class="shop-buttons">
+                            ${shopeeBtn}
+                            ${lazadaBtn}
+                            ${tiktokBtn}
+                        </div>
+                    </div>
+                </details>`;
+            }).join('');
+        }
+
+        // Gọi API khi load xong trang
         document.addEventListener("DOMContentLoaded", loadData);
     </script>
 </body>
