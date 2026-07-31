@@ -425,11 +425,16 @@
             // Lấy từ vựng (dùng % để lặp lại danh sách)
             const wordObj = vocabList[dayIndex % vocabList.length];
 
-            // Cập nhật nhãn thời gian
+            // Cập nhật nhãn thời gian: Hôm nay, Hôm qua, hoặc Ngày Tháng Năm
             let labelStr = "Hôm nay";
-            if (vocabOffset === -1) labelStr = "Hôm qua";
-            else if (vocabOffset === -2) labelStr = "Hôm kia";
-            else if (vocabOffset < -2) labelStr = Math.abs(vocabOffset) + " ngày trước";
+            if (vocabOffset === -1) {
+                labelStr = "Hôm qua";
+            } else if (vocabOffset < -1) {
+                const d = today.getDate().toString().padStart(2, '0');
+                const m = (today.getMonth() + 1).toString().padStart(2, '0');
+                const y = today.getFullYear();
+                labelStr = `${d}/${m}/${y}`;
+            }
 
             document.getElementById('vocab-label').innerText = labelStr;
             document.getElementById('vocab-word').innerText = wordObj.w;
