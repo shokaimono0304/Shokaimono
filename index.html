@@ -182,7 +182,7 @@
         .filter-chip:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--shadow-color); }
         .filter-chip.active { background: var(--btn-yellow); color: var(--text-title); }
 
-        /* GÓC REVIEW (DẠNG THU GỌN - BẤM ĐỂ MỞ) */
+        /* GÓC REVIEW */
         .review-card { 
             background: var(--btn-blue); border-radius: 16px; margin-bottom: 18px; 
             border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--shadow-color);
@@ -213,7 +213,7 @@
         .review-body { padding: 0 20px 20px 20px; }
         
         .review-img {
-            width: 100%; height: auto; max-height: 250px; object-fit: cover;
+            width: 100%; height: auto; max-height: 250px; object-fit: cover; cursor: zoom-in;
             border-radius: 12px; border: 3px solid var(--border-color); margin-bottom: 15px; background: #fff;
         }
 
@@ -243,6 +243,25 @@
         #scrollTopBtn { bottom: 25px; right: 20px; display: none; }
         #musicToggleBtn { bottom: 25px; left: 20px; background: #fff;}
 
+        /* === LIGHTBOX & ZOOM ẢNH === */
+        .lightbox-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85); z-index: 10000; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+        .lightbox-img-wrapper {
+            position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
+        }
+        .lightbox-img {
+            max-width: 95%; max-height: 90vh; object-fit: contain; border-radius: 8px;
+            transition: transform 0.1s ease-out; touch-action: none; /* Cần thiết để vuốt mượt */
+        }
+        .close-lightbox {
+            position: absolute; top: 20px; right: 20px; color: #fff; font-size: 35px; font-weight: 900;
+            background: var(--border-color); width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 10001;
+            border: 3px solid #fff; box-shadow: 2px 2px 0px #000;
+        }
     </style>
 </head>
 <body>
@@ -253,7 +272,9 @@
     <!-- Nút điều khiển nhạc -->
     <button id="musicToggleBtn" class="float-btn" onclick="toggleMusic()">🔇</button>
     
-    <!-- Vùng chứa YouTube Ẩn -->
+    <!-- AUDIO HTML (Dành cho link .mp3) -->
+    <audio id="html-audio" loop style="display:none;"></audio>
+    <!-- Vùng chứa YouTube (https://music.youtube.com/watch?v=CoSc0Qqd5L0&si=pLuMjBbsFw26iH-f) -->
     <div id="ytplayer" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
 
     <div id="mySidebar" class="sidebar">
@@ -293,17 +314,19 @@
         </div>
 
         <div id="tab-reviews" class="tab-content">
-            <!-- THANH LỌC DANH MỤC DẠNG VUỐT NGANG -->
-            <div class="filter-scroll-container" id="filter-container" style="display:none;">
-                <!-- Nội dung lọc sẽ chèn tự động vào đây -->
-            </div>
-
-            <!-- DANH SÁCH SẢN PHẨM -->
+            <div class="filter-scroll-container" id="filter-container" style="display:none;"></div>
             <div id="review-list">
                 <div class="skeleton skeleton-large"></div>
                 <div class="skeleton skeleton-large"></div>
-                <div class="skeleton skeleton-large"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX OVERLAY (Phóng to ảnh) -->
+    <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox(event)">
+        <div class="close-lightbox" onclick="closeLightbox(event, true)">×</div>
+        <div class="lightbox-img-wrapper">
+            <img id="lightboxImg" class="lightbox-img" src="" alt="Zoomed">
         </div>
     </div>
 
@@ -311,70 +334,77 @@
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         /* =========================================
-           CÀI ĐẶT NHẠC YOUTUBE
+           CÀI ĐẶT NHẠC (HYBRID YOUTUBE & MP3)
         ========================================= */
-        // Thay ID video YouTube bạn muốn vào đây:
-        // Ví dụ link youtube: https://www.youtube.com/watch?v=jfKfPfyJRdk ---> ID là: jfKfPfyJRdk
-        const YOUTUBE_VIDEO_ID = "jfKfPfyJRdk"; // Đang để mặc định là nhạc Lofi Girl
-
-        let player;
+        // Thay link nhạc của bạn vào đây. 
+        // CÓ THỂ LÀ: Link YouTube, ID Video YouTube, hoặc Link .mp3 trực tiếp!
+        const MUSIC_SOURCE = "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3"; 
+        
+        let playerType = 'none'; // 'youtube' hoặc 'audio'
+        let ytPlayer;
         let isPlaying = false;
         let userInteracted = false;
+        const htmlAudio = document.getElementById('html-audio');
+        const musicBtn = document.getElementById('musicToggleBtn');
 
+        // Hàm phân tích link Youtube
+        function getYTVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Khởi tạo hệ thống nhạc khi web tải xong
+        function initMusicSystem() {
+            if (MUSIC_SOURCE.includes('.mp3') || MUSIC_SOURCE.includes('.wav') || (!MUSIC_SOURCE.includes('youtu') && MUSIC_SOURCE.includes('http'))) {
+                playerType = 'audio';
+                htmlAudio.src = MUSIC_SOURCE;
+                
+                htmlAudio.onplay = () => { isPlaying = true; musicBtn.innerText = "🎵"; };
+                htmlAudio.onpause = () => { isPlaying = false; musicBtn.innerText = "🔇"; };
+            } 
+            else {
+                playerType = 'youtube';
+                // Đợi API Youtube load xong sẽ gọi onYouTubeIframeAPIReady()
+            }
+        }
+        initMusicSystem();
+
+        // Khởi tạo Youtube nếu nguồn là Youtube
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('ytplayer', {
-                height: '0',
-                width: '0',
-                videoId: YOUTUBE_VIDEO_ID,
-                playerVars: {
-                    'autoplay': 1, 
-                    'loop': 1, 
-                    'playlist': YOUTUBE_VIDEO_ID,
-                    'controls': 0,
-                    'showinfo': 0,
-                    'autohide': 1,
-                    'modestbranding': 1
-                },
+            if (playerType !== 'youtube') return;
+            
+            let videoId = getYTVideoId(MUSIC_SOURCE) || (MUSIC_SOURCE.length === 11 ? MUSIC_SOURCE : 'jfKfPfyJRdk');
+            ytPlayer = new YT.Player('ytplayer', {
+                height: '0', width: '0', videoId: videoId,
+                playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': videoId, 'controls': 0 },
                 events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onReady': (event) => { event.target.playVideo(); },
+                    'onStateChange': (event) => {
+                        if (event.data == YT.PlayerState.PLAYING) { musicBtn.innerText = "🎵"; isPlaying = true; } 
+                        else if (event.data == YT.PlayerState.PAUSED) { musicBtn.innerText = "🔇"; isPlaying = false; }
+                    }
                 }
             });
         }
 
-        function onPlayerReady(event) {
-            // Cố gắng tự động phát ngay khi web load xong
-            event.target.playVideo();
-        }
-
-        function onPlayerStateChange(event) {
-            const musicBtn = document.getElementById('musicToggleBtn');
-            if (event.data == YT.PlayerState.PLAYING) {
-                musicBtn.innerText = "🎵";
-                isPlaying = true;
-            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
-                musicBtn.innerText = "🔇";
-                isPlaying = false;
-            }
-        }
-
         function toggleMusic() {
-            if (player && typeof player.getPlayerState === 'function') {
-                if (player.getPlayerState() == YT.PlayerState.PLAYING) {
-                    player.pauseVideo();
-                } else {
-                    player.playVideo();
-                }
-                userInteracted = true; // Đã chủ động bấm thì đánh dấu luôn
+            if (playerType === 'audio') {
+                if (htmlAudio.paused) { htmlAudio.play(); } else { htmlAudio.pause(); }
+            } else if (playerType === 'youtube' && ytPlayer && typeof ytPlayer.getPlayerState === 'function') {
+                if (ytPlayer.getPlayerState() == YT.PlayerState.PLAYING) { ytPlayer.pauseVideo(); } 
+                else { ytPlayer.playVideo(); }
             }
+            userInteracted = true; 
         }
 
-        // Bắt sự kiện chạm/click đầu tiên để lách luật chặn tự động phát của trình duyệt
+        // Bắt chạm đầu tiên để lách luật chặn tự động phát
         document.body.addEventListener('click', function(e) {
-            // Nếu người dùng chưa tương tác và không bấm trực tiếp vào nút tắt/bật nhạc
             if (!userInteracted && e.target.id !== 'musicToggleBtn') {
-                if (player && typeof player.playVideo === 'function' && player.getPlayerState() !== YT.PlayerState.PLAYING) {
-                    player.playVideo();
+                if (playerType === 'audio' && htmlAudio.paused) {
+                    htmlAudio.play().catch(e => console.log("Trình duyệt chặn autoplay"));
+                } else if (playerType === 'youtube' && ytPlayer && typeof ytPlayer.playVideo === 'function' && ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
+                    ytPlayer.playVideo();
                 }
                 userInteracted = true;
             }
@@ -382,7 +412,67 @@
 
 
         /* =========================================
-           HIỆU ỨNG & GIAO DIỆN
+           HỆ THỐNG PHÓNG TO ẢNH (PINCH TO ZOOM)
+        ========================================= */
+        const lightbox = document.getElementById('lightboxOverlay');
+        const lightboxImg = document.getElementById('lightboxImg');
+        let currentScale = 1;
+        let initialDistance = null;
+
+        function openLightbox(imgSrc) {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = imgSrc;
+            currentScale = 1;
+            lightboxImg.style.transform = `scale(1)`;
+        }
+
+        function closeLightbox(e, force = false) {
+            // Đóng nếu click ra ngoài ảnh hoặc bấm nút X
+            if (force || e.target === lightbox || e.target.classList.contains('lightbox-img-wrapper')) {
+                lightbox.style.display = 'none';
+                lightboxImg.src = '';
+            }
+        }
+
+        // Xử lý dùng 2 ngón tay thu phóng ảnh
+        lightboxImg.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                initialDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+            }
+        });
+
+        lightboxImg.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2 && initialDistance) {
+                e.preventDefault(); // Chặn cuộn trang
+                const currentDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                
+                let scaleChange = currentDistance / initialDistance;
+                let newScale = currentScale * scaleChange;
+                
+                // Giới hạn zoom từ 1x đến 4x
+                if (newScale < 1) newScale = 1;
+                if (newScale > 4) newScale = 4;
+                
+                lightboxImg.style.transform = `scale(${newScale})`;
+                
+                initialDistance = currentDistance;
+                currentScale = newScale;
+            }
+        });
+
+        lightboxImg.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) { initialDistance = null; }
+        });
+
+
+        /* =========================================
+           HIỆU ỨNG HOA RƠI & GIAO DIỆN CHUNG
         ========================================= */
         function createSakura() {
             const container = document.getElementById('bg-container');
@@ -410,9 +500,7 @@
 
                 if (effectType === 'glow') petal.classList.add('glow-petal');
                 petal.style.left = Math.random() * 100 + 'vw';
-                let fallAnim = effectType === 'reverse' ? 'fall-reverse' : 'fall';
-                let swayAnim = effectType === 'rain' ? 'sway-rain' : 'sway';
-                petal.style.animationName = `${fallAnim}, ${swayAnim}`;
+                petal.style.animationName = `${effectType === 'reverse' ? 'fall-reverse' : 'fall'}, ${effectType === 'rain' ? 'sway-rain' : 'sway'}`;
                 petal.style.animationDuration = (Math.random() * 5 * speedMod + 5 * speedMod) + 's, ' + (Math.random() * 3 * swayMod + 2 * swayMod) + 's';
                 petal.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 10) + 's';
                 container.appendChild(petal);
@@ -441,14 +529,11 @@
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
             const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            const dayName = days[now.getDay()];
-            const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${dayName}</span><br>Dương: ${dateSolar}`;
+            document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${days[now.getDay()]}</span><br>Dương: ${now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
             try {
-                const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
-                let rawLunar = formatter.format(now); let lunarParts = rawLunar.split(/[\/\-.]/);
-                let dateLunar = `${lunarParts[0]}/${lunarParts[1]}`; 
-                document.getElementById('clock-date-lunar').innerText = `(Âm: ${dateLunar})`;
+                let rawLunar = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' }).format(now); 
+                let lunarParts = rawLunar.split(/[\/\-.]/);
+                document.getElementById('clock-date-lunar').innerText = `(Âm: ${lunarParts[0]}/${lunarParts[1]})`;
             } catch (e) { document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`; }
         }
         setInterval(updateClock, 1000); updateClock();
@@ -498,27 +583,16 @@
         /* TẠO THANH DANH MỤC */
         function renderCategoryDropdown() {
             const filterContainer = document.getElementById('filter-container');
-            
             const categories = new Set();
             allReviewsData.forEach(row => {
-                let catValue = row[6];
-                if (catValue !== undefined && catValue !== null && String(catValue).trim() !== '') {
-                    categories.add(String(catValue).trim());
-                }
+                if (row[6] && String(row[6]).trim() !== '') categories.add(String(row[6]).trim());
             });
 
-            if (categories.size === 0) {
-                filterContainer.style.display = 'none';
-                return;
-            } else {
-                filterContainer.style.display = 'flex';
-            }
+            if (categories.size === 0) { filterContainer.style.display = 'none'; return; } 
+            else { filterContainer.style.display = 'flex'; }
             
             let html = `<div class="filter-chip active" onclick="filterByCategory('Tất cả', this)">🌸 Tất cả</div>`;
-            categories.forEach(cat => {
-                html += `<div class="filter-chip" onclick="filterByCategory('${cat}', this)">${cat}</div>`;
-            });
-            
+            categories.forEach(cat => { html += `<div class="filter-chip" onclick="filterByCategory('${cat}', this)">${cat}</div>`; });
             filterContainer.innerHTML = html;
         }
 
@@ -529,26 +603,22 @@
             renderReviews(categoryName);
         }
 
-        /* HÀM CHUYỂN ĐỔI LINK GOOGLE DRIVE SANG LINK ẢNH TRỰC TIẾP */
         function getDirectImageUrl(url) {
             if (!url) return '';
             url = String(url).trim();
-            // Nếu là link Google Drive, chuyển thành định dạng hiển thị ảnh được
             let driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
             if (url.includes('drive.google.com') && driveMatch) {
                 return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
             }
-            return url; // Nếu không phải Google Drive thì giữ nguyên
+            return url; 
         }
 
         /* HIỂN THỊ REVIEW */
         function renderReviews(categoryName) {
             const reviewContainer = document.getElementById('review-list');
-            
             const filteredData = allReviewsData.filter(row => {
                 if (categoryName === "Tất cả") return true;
-                let rowCat = (row[6] !== undefined && row[6] !== null) ? String(row[6]).trim() : "";
-                return rowCat === categoryName;
+                return (row[6] ? String(row[6]).trim() : "") === categoryName;
             });
 
             if (filteredData.length === 0) {
@@ -561,18 +631,14 @@
                 let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
                 let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
                 
-                // Sử dụng hàm xử lý link ảnh ở trên để sửa lỗi link Google Drive
                 let imageHtml = '';
                 let imgUrl = getDirectImageUrl(row[7]); 
                 if (imgUrl !== '') {
-                    imageHtml = `<img src="${imgUrl}" alt="Ảnh sản phẩm" class="review-img" loading="lazy">`;
+                    // Thêm sự kiện onclick để mở Lightbox
+                    imageHtml = `<img src="${imgUrl}" alt="Ảnh sản phẩm" class="review-img" loading="lazy" onclick="openLightbox('${imgUrl}')">`;
                 }
 
-                // Tag danh mục
-                let catBadgeHtml = '';
-                if (row[6] && String(row[6]).trim() !== '') {
-                    catBadgeHtml = `<span class="cat-badge">${String(row[6]).trim()}</span>`;
-                }
+                let catBadgeHtml = row[6] ? `<span class="cat-badge">${String(row[6]).trim()}</span>` : '';
                 
                 return `<details class="review-card">
                     <summary class="review-title">
