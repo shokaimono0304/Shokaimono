@@ -41,10 +41,8 @@
             overflow-x: hidden;
         }
 
-        /* Bắt buộc các thẻ input, button kế thừa font chữ của body để không bị lỗi font Tiếng Việt */
-        button, input, select, textarea {
-            font-family: inherit;
-        }
+        /* Bắt buộc các thẻ kế thừa font chữ của body */
+        button, input, select, textarea { font-family: inherit; }
 
         /* --- BACKGROUND HOA ANH ĐÀO RƠI --- */
         #bg-container {
@@ -86,39 +84,23 @@
 
         /* --- HEADER & MENU --- */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 15px 20px;
-            background: transparent;
-            position: relative;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 15px 20px; background: transparent; position: relative; z-index: 100;
         }
 
         .menu-btn {
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--border-color);
-            background: #fff;
-            border: 3px solid var(--border-color);
-            border-radius: 12px;
-            width: 45px; height: 45px;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 3px 3px 0px var(--shadow-color);
-            transition: 0.1s;
+            font-size: 28px; cursor: pointer; color: var(--border-color); background: #fff;
+            border: 3px solid var(--border-color); border-radius: 12px;
+            width: 45px; height: 45px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 3px 3px 0px var(--shadow-color); transition: 0.1s;
         }
         .menu-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--shadow-color); }
 
-        .datetime-box { 
-            display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
-        }
+        .datetime-box { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
         .time-block, .date-block {
-            background: #fff;
-            border: 3px solid var(--border-color);
-            border-radius: 12px;
-            padding: 4px 12px;
-            box-shadow: 3px 3px 0px var(--shadow-color);
-            text-align: center;
+            background: #fff; border: 3px solid var(--border-color);
+            border-radius: 12px; padding: 4px 12px;
+            box-shadow: 3px 3px 0px var(--shadow-color); text-align: center;
         }
         .time-block { color: var(--text-title); font-weight: 900; font-size: 16px; background: var(--btn-pink); }
         .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
@@ -127,17 +109,13 @@
         /* --- SIDEBAR MENU --- */
         .sidebar {
             height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0;
-            background: var(--bg-main);
-            border-right: 4px solid var(--border-color);
-            overflow-x: hidden; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            padding-top: 80px;
+            background: var(--bg-main); border-right: 4px solid var(--border-color);
+            overflow-x: hidden; transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); padding-top: 80px;
         }
         .sidebar a {
-            padding: 16px 25px; text-decoration: none; font-size: 16px;
-            color: var(--text-main); display: block; font-weight: 800;
-            margin: 0 15px 15px 15px; border: 3px solid var(--border-color);
-            border-radius: 12px; background: #fff; box-shadow: 3px 3px 0px var(--shadow-color);
-            transition: 0.1s;
+            padding: 16px 25px; text-decoration: none; font-size: 16px; color: var(--text-main); 
+            display: block; font-weight: 800; margin: 0 15px 15px 15px; border: 3px solid var(--border-color);
+            border-radius: 12px; background: #fff; box-shadow: 3px 3px 0px var(--shadow-color); transition: 0.1s;
         }
         .sidebar a:active, .sidebar a.active {
             background: var(--btn-pink); transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--shadow-color);
@@ -153,139 +131,116 @@
             position: relative; z-index: 10;
         }
 
-        /* Khu vực Tiêu đề */
-        .title-wrapper {
-            text-align: center;
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .title-wrapper { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         h1 { 
-            font-size: 24px; font-weight: 900; text-align: center;
-            text-transform: uppercase; color: var(--text-title);
-            background: var(--btn-pink);
-            border: 3px solid var(--border-color);
-            border-radius: 16px;
-            padding: 15px 20px;
-            box-shadow: 4px 4px 0px var(--shadow-color);
-            margin: 0;
-            width: 100%;
+            font-size: 24px; font-weight: 900; text-align: center; text-transform: uppercase; color: var(--text-title);
+            background: var(--btn-pink); border: 3px solid var(--border-color); border-radius: 16px;
+            padding: 15px 20px; box-shadow: 4px 4px 0px var(--shadow-color); margin: 0; width: 100%;
         }
-
         .tab-indicator {
-            display: inline-block;
-            background: var(--btn-yellow);
-            border: 3px solid var(--border-color);
-            border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 13px;
-            font-weight: 900;
-            color: var(--border-color);
-            box-shadow: 2px 2px 0px var(--shadow-color);
-            text-transform: uppercase;
+            display: inline-block; background: var(--btn-yellow); border: 3px solid var(--border-color);
+            border-radius: 20px; padding: 4px 16px; font-size: 13px; font-weight: 900; color: var(--border-color);
+            box-shadow: 2px 2px 0px var(--shadow-color); text-transform: uppercase;
         }
 
-        /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
 
-        /* === HIỆU ỨNG SKELETON LOADING === */
+        /* SKELETON LOADING */
         .skeleton {
-            background: #e2e8f0;
-            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-            background-size: 200% 100%;
-            animation: skeletonLoading 1.5s infinite;
-            border-radius: 14px;
-            height: 58px;
-            margin-bottom: 16px;
-            border: 3px solid #cbd5e1;
-            box-shadow: 4px 4px 0px #cbd5e1;
-            width: 100%;
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite; border-radius: 14px; height: 58px; margin-bottom: 16px;
+            border: 3px solid #cbd5e1; box-shadow: 4px 4px 0px #cbd5e1; width: 100%;
         }
         .skeleton-large { height: 75px; border-radius: 16px; }
-        
-        @keyframes skeletonLoading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
+        @keyframes skeletonLoading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* === CÁC NÚT BẤM (MẠNG XÃ HỘI, FILE) === */
+        /* CÁC NÚT BẤM (MẠNG XÃ HỘI, FILE) */
         a.btn { 
             display: flex; justify-content: space-between; align-items: center; 
-            text-decoration: none; padding: 16px 20px; margin-bottom: 16px; 
-            border-radius: 14px; 
-            border: 3px solid var(--border-color); 
-            box-shadow: 4px 4px 0px var(--shadow-color);
-            color: var(--text-main);
-            width: 100%; 
-            transition: 0.1s;
-            background: var(--btn-blue);
+            text-decoration: none; padding: 16px 20px; margin-bottom: 16px; border-radius: 14px; 
+            border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--shadow-color);
+            color: var(--text-main); width: 100%; transition: 0.1s; background: var(--btn-blue);
         }
         a.btn:nth-child(odd) { background: var(--btn-pink); }
         a.btn:nth-child(even) { background: var(--btn-blue); }
-        
-        a.btn:active {
-            transform: translate(3px, 3px);
-            box-shadow: 1px 1px 0px var(--shadow-color);
-        }
+        a.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px var(--shadow-color); }
         .btn-text { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         .btn-icon-right { color: var(--border-color); font-size: 16px; font-weight: 900; }
 
-        /* === GÓC REVIEW DANH MỤC & SẢN PHẨM === */
-        .category-filters {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 15px;
-            margin-bottom: 5px;
-            scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+        /* === TÍNH NĂNG MỚI: NÚT LỌC MENU XỔ XUỐNG === */
+        .filter-container {
+            margin-bottom: 20px;
+            position: relative;
+            display: block; /* Ẩn mặc định, JS sẽ bật lên */
+            z-index: 50; /* Đè lên các thẻ bên dưới */
         }
         
-        .category-filters::-webkit-scrollbar { 
-            display: none; /* Ẩn thanh cuộn trên Chrome/Safari */
-        }
-
-        .cat-btn {
-            white-space: nowrap;
-            padding: 8px 16px;
-            border-radius: 20px;
+        .filter-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 14px;
             border: 3px solid var(--border-color);
             font-weight: 800;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             background: #fff;
-            box-shadow: 3px 3px 0px var(--shadow-color);
+            box-shadow: 4px 4px 0px var(--shadow-color);
             transition: 0.1s;
             color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .cat-btn:active {
+        .filter-btn:active {
             transform: translate(3px, 3px);
-            box-shadow: 0px 0px 0px var(--shadow-color);
-        }
-
-        .cat-btn.active {
-            background: var(--btn-yellow);
-            transform: translate(2px, 2px);
             box-shadow: 1px 1px 0px var(--shadow-color);
-            color: var(--text-title);
         }
 
-        .review-card { 
-            background: var(--btn-blue); 
-            border-radius: 16px; margin-bottom: 18px; 
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 100%;
+            background-color: #fff;
             border: 3px solid var(--border-color);
+            border-radius: 14px;
             box-shadow: 4px 4px 0px var(--shadow-color);
+            overflow: hidden;
+        }
+
+        .dropdown-content.show {
+            display: block;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-item {
+            padding: 14px 20px;
+            font-weight: 800;
+            cursor: pointer;
+            border-bottom: 2px dashed var(--border-color);
+            transition: background 0.2s;
+            font-size: 15px;
+        }
+
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-item:hover { background-color: var(--btn-pink); }
+        .dropdown-item.active { background-color: var(--btn-yellow); color: var(--text-title); }
+
+        /* GÓC REVIEW */
+        .review-card { 
+            background: var(--btn-blue); border-radius: 16px; margin-bottom: 18px; 
+            border: 3px solid var(--border-color); box-shadow: 4px 4px 0px var(--shadow-color);
             overflow: hidden; width: 100%; transition: 0.2s ease-in-out;
         }
-        
         .review-card:nth-child(odd) { background: var(--btn-pink); }
         .review-card:nth-child(even) { background: var(--btn-blue); }
         .review-card[open] { background: var(--btn-yellow); }
@@ -299,46 +254,40 @@
         .review-card[open] .review-title::after { transform: rotate(180deg); }
 
         .review-body { padding: 0 20px 20px 20px; }
+        
+        /* TÍNH NĂNG MỚI: ẢNH SẢN PHẨM TRONG REVIEW */
+        .review-img {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid var(--border-color);
+            margin-bottom: 15px;
+            background: #fff;
+        }
+
         .review-content { 
             font-size: 14px; font-weight: 600; white-space: pre-line; line-height: 1.6; 
             margin-bottom: 16px; padding-top: 12px; border-top: 2px dashed var(--border-color);
         }
         
-        .shop-buttons {
-            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
-        }
+        .shop-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
         .btn-shop { 
-            flex: 1; min-width: 90px;
-            display: block; color: #fff !important; 
-            text-align: center; padding: 12px 8px; border-radius: 12px; text-decoration: none;
-            font-weight: 800; font-size: 13px;
-            border: 3px solid var(--border-color);
-            box-shadow: 2px 2px 0px var(--border-color); transition: 0.1s;
+            flex: 1; min-width: 90px; display: block; color: #fff !important; text-align: center; 
+            padding: 12px 8px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 13px;
+            border: 3px solid var(--border-color); box-shadow: 2px 2px 0px var(--border-color); transition: 0.1s;
         }
         .btn-shop:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border-color); }
-        
-        .btn-shopee { background: #ee4d2d; }
-        .btn-lazada { background: #0a31aa; }
-        .btn-tiktok { background: #000000; }
+        .btn-shopee { background: #ee4d2d; } .btn-lazada { background: #0a31aa; } .btn-tiktok { background: #000000; }
 
-        /* === NÚT VỀ ĐẦU TRANG === */
         #scrollTopBtn {
-            display: none; 
-            position: fixed; bottom: 25px; right: 20px; z-index: 999;
-            width: 50px; height: 50px;
-            font-size: 20px; font-weight: 900;
-            background: var(--btn-yellow);
-            color: var(--border-color);
-            border: 3px solid var(--border-color);
-            border-radius: 50%;
-            box-shadow: 3px 3px 0px var(--shadow-color);
-            cursor: pointer;
-            transition: 0.1s;
+            display: none; position: fixed; bottom: 25px; right: 20px; z-index: 999;
+            width: 50px; height: 50px; font-size: 20px; font-weight: 900; background: var(--btn-yellow);
+            color: var(--border-color); border: 3px solid var(--border-color); border-radius: 50%;
+            box-shadow: 3px 3px 0px var(--shadow-color); cursor: pointer; transition: 0.1s;
         }
-        #scrollTopBtn:active {
-            transform: translate(3px, 3px);
-            box-shadow: 1px 1px 0px var(--shadow-color);
-        }
+        #scrollTopBtn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px var(--shadow-color); }
     </style>
 </head>
 <body>
@@ -388,9 +337,16 @@
         </div>
 
         <div id="tab-reviews" class="tab-content">
-            <!-- Khu vực lọc danh mục trượt ngang -->
-            <div id="category-filters" class="category-filters">
-                <!-- Nút danh mục sẽ tự động chèn vào đây -->
+            
+            <!-- MENU XỔ XUỐNG LỌC DANH MỤC -->
+            <div class="filter-container" id="filter-container" style="display:none;">
+                <button class="filter-btn" onclick="toggleDropdown()">
+                    <span id="filter-text">🌸 Lọc: Tất cả</span>
+                    <span>▼</span>
+                </button>
+                <div class="dropdown-content" id="filter-dropdown">
+                    <!-- Danh mục sẽ chèn tự động vào đây -->
+                </div>
             </div>
 
             <!-- Danh sách review -->
@@ -403,114 +359,102 @@
     </div>
 
     <script>
-        /* TẠO BACKGROUND HOA ANH ĐÀO */
+        /* BACKGROUND HOA ANH ĐÀO */
         function createSakura() {
             const container = document.getElementById('bg-container');
             const day = new Date().getDay(); 
-            
             let numPetals = 25; let speedMod = 1; let swayMod = 1; let effectType = 'normal'; 
             const themeEmojis = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
             
-            if (day === 0) { numPetals = 15; speedMod = 1.5; } 
-            else if (day === 1) { numPetals = 35; speedMod = 0.6; } 
-            else if (day === 2) { numPetals = 25; swayMod = 0.4; } 
-            else if (day === 3) { numPetals = 40; speedMod = 0.8; effectType = 'rain'; } 
-            else if (day === 4) { numPetals = 25; effectType = 'reverse'; } 
-            else if (day === 5) { numPetals = 20; effectType = 'glow'; } 
+            if (day === 0) { numPetals = 15; speedMod = 1.5; } else if (day === 1) { numPetals = 35; speedMod = 0.6; } 
+            else if (day === 2) { numPetals = 25; swayMod = 0.4; } else if (day === 3) { numPetals = 40; speedMod = 0.8; effectType = 'rain'; } 
+            else if (day === 4) { numPetals = 25; effectType = 'reverse'; } else if (day === 5) { numPetals = 20; effectType = 'glow'; } 
             else if (day === 6) { numPetals = 25; effectType = 'emoji'; }
 
             for (let i = 0; i < numPetals; i++) {
-                let petal = document.createElement('div');
-                petal.classList.add('petal');
-                
+                let petal = document.createElement('div'); petal.classList.add('petal');
                 let size = Math.random() * 8 + 6;
-                if (day === 0) size += 4; 
-                if (effectType === 'rain') size -= 2; 
+                if (day === 0) size += 4; if (effectType === 'rain') size -= 2; 
 
                 if (effectType === 'emoji') {
                     petal.innerText = themeEmojis[Math.floor(Math.random() * themeEmojis.length)];
-                    petal.style.background = 'transparent'; petal.style.boxShadow = 'none';
-                    petal.style.fontSize = (size + 12) + 'px'; petal.style.display = 'flex';
-                    petal.style.alignItems = 'center'; petal.style.justifyContent = 'center';
+                    petal.style.background = 'transparent'; petal.style.boxShadow = 'none'; petal.style.fontSize = (size + 12) + 'px'; 
+                    petal.style.display = 'flex'; petal.style.alignItems = 'center'; petal.style.justifyContent = 'center';
                 } else {
                     petal.style.width = size + 'px'; petal.style.height = (size + 3) + 'px';
                 }
 
                 if (effectType === 'glow') petal.classList.add('glow-petal');
                 petal.style.left = Math.random() * 100 + 'vw';
-                
                 let fallAnim = effectType === 'reverse' ? 'fall-reverse' : 'fall';
                 let swayAnim = effectType === 'rain' ? 'sway-rain' : 'sway';
-                
                 petal.style.animationName = `${fallAnim}, ${swayAnim}`;
                 petal.style.animationDuration = (Math.random() * 5 * speedMod + 5 * speedMod) + 's, ' + (Math.random() * 3 * swayMod + 2 * swayMod) + 's';
                 petal.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 10) + 's';
-                
                 container.appendChild(petal);
             }
         }
         createSakura();
 
-        /* XỬ LÝ NÚT CUỘN LÊN ĐẦU TRANG */
+        /* NÚT VỀ ĐẦU TRANG */
         window.onscroll = function() {
             let btn = document.getElementById("scrollTopBtn");
-            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) {
-                btn.style.display = "block";
-            } else { btn.style.display = "none"; }
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) { btn.style.display = "block"; } else { btn.style.display = "none"; }
         };
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-        /* XỬ LÝ MENU & ĐỔI TÊN TAB ĐỘNG */
+        /* MENU & TABS */
         function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
         function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
-        
         function openTab(tabId, btnElement) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
             document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
             btnElement.classList.add('active');
-            
             document.getElementById('current-tab-title').innerText = btnElement.innerText;
             closeMenu();
         }
 
-        /* ĐỒNG HỒ & CẮT CHUẨN NGÀY ÂM - ĐÃ THÊM THỨ */
+        /* ĐỒNG HỒ */
         function updateClock() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
-            
-            // Xử lý lấy tên Thứ
             const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
             const dayName = days[now.getDay()];
-
-            // Xử lý Ngày dương
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            
-            // Xuất ra HTML (Thứ màu nổi hơn chút và xuống dòng Ngày dương)
             document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${dayName}</span><br>Dương: ${dateSolar}`;
-            
-            // Xử lý Ngày âm
             try {
                 const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
-                let rawLunar = formatter.format(now);
-                let lunarParts = rawLunar.split(/[\/\-.]/);
+                let rawLunar = formatter.format(now); let lunarParts = rawLunar.split(/[\/\-.]/);
                 let dateLunar = `${lunarParts[0]}/${lunarParts[1]}`; 
                 document.getElementById('clock-date-lunar').innerText = `(Âm: ${dateLunar})`;
-            } catch (e) {
-                document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`;
-            }
+            } catch (e) { document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`; }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
         const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
         function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
+        /* --- XỬ LÝ DROPDOWN LỌC --- */
+        function toggleDropdown() {
+            document.getElementById("filter-dropdown").classList.toggle("show");
+        }
+
+        // Đóng menu nếu bấm ra ngoài
+        window.onclick = function(event) {
+            if (!event.target.closest('.filter-container')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
         /* --- XỬ LÝ FETCH API VÀ RENDER SẢN PHẨM --- */
         const API_URL = "https://script.google.com/macros/s/AKfycbxAPpa4plhdHrMN-sycWG14RRdXUc8LpIiM4kWSY6IULevqzzk5Lc793uvd2Q3BohQCKg/exec";
-        
-        // Lưu trữ dữ liệu review
         let allReviewsData = [];
 
         async function loadData() {
@@ -518,52 +462,36 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // Đổ dữ liệu Tab BIO
                 const bioContainer = document.getElementById('bio-list');
                 if (data.bio && data.bio.length > 0) {
-                    bioContainer.innerHTML = data.bio.map(row => 
-                        `<a href="${row[1]}" class="btn" target="_blank">
-                            <span class="btn-text">${getRandomIcon()} ${row[0]}</span>
-                            <span class="btn-icon-right">▼</span>
-                        </a>`
-                    ).join('');
+                    bioContainer.innerHTML = data.bio.map(row => `<a href="${row[1]}" class="btn" target="_blank"><span class="btn-text">${getRandomIcon()} ${row[0]}</span><span class="btn-icon-right">▼</span></a>`).join('');
                 } else { bioContainer.innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có liên kết nào</p>'; }
 
-                // Đổ dữ liệu Tab TÀI LIỆU
                 const fileContainer = document.getElementById('file-list');
                 if (data.files && data.files.length > 0) {
-                    fileContainer.innerHTML = data.files.map(row => 
-                        `<a href="${row[1]}" class="btn" target="_blank">
-                            <span class="btn-text">${getRandomIcon()} ${row[0]}</span>
-                            <span class="btn-icon-right">▼</span>
-                        </a>`
-                    ).join('');
+                    fileContainer.innerHTML = data.files.map(row => `<a href="${row[1]}" class="btn" target="_blank"><span class="btn-text">${getRandomIcon()} ${row[0]}</span><span class="btn-icon-right">▼</span></a>`).join('');
                 } else { fileContainer.innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có tài liệu nào</p>'; }
 
-                // Đổ dữ liệu Tab REVIEW
                 if (data.reviews && data.reviews.length > 0) {
                     allReviewsData = data.reviews;
-                    renderCategoryButtons();
-                    renderReviews("Tất cả"); // Mặc định hiển thị tất cả
+                    renderCategoryDropdown();
+                    renderReviews("Tất cả"); 
                 } else { 
                     document.getElementById('review-list').innerHTML = '<p style="text-align:center; font-weight: bold;">Chưa có bài review nào</p>'; 
-                    document.getElementById('category-filters').style.display = 'none';
+                    document.getElementById('filter-container').style.display = 'none';
                 }
-                
             } catch (error) {
                 console.error("Lỗi:", error);
                 const errorMsg = '<p style="text-align:center; color:red; font-weight: bold;">Lỗi tải dữ liệu. Vui lòng F5 lại trang!</p>';
-                document.getElementById('bio-list').innerHTML = errorMsg;
-                document.getElementById('file-list').innerHTML = errorMsg;
-                document.getElementById('review-list').innerHTML = errorMsg;
+                document.getElementById('bio-list').innerHTML = errorMsg; document.getElementById('file-list').innerHTML = errorMsg; document.getElementById('review-list').innerHTML = errorMsg;
             }
         }
 
-        // Tạo các nút danh mục từ Cột 7 (row[6]) trong Sheet
-        function renderCategoryButtons() {
-            const filterContainer = document.getElementById('category-filters');
+        /* TẠO MENU XỔ XUỐNG DỰA VÀO CỘT 7 (row[6]) */
+        function renderCategoryDropdown() {
+            const filterContainer = document.getElementById('filter-container');
+            const dropdown = document.getElementById('filter-dropdown');
             
-            // Lấy ra các danh mục duy nhất, bỏ qua ô trống
             const categories = new Set();
             allReviewsData.forEach(row => {
                 if (row[6] && row[6].trim() !== '') {
@@ -571,35 +499,41 @@
                 }
             });
 
-            // Nếu không có danh mục nào thì ẩn luôn thanh lọc
             if (categories.size === 0) {
                 filterContainer.style.display = 'none';
                 return;
+            } else {
+                filterContainer.style.display = 'block';
             }
             
-            let html = `<button class="cat-btn active" onclick="filterByCategory('Tất cả', this)">🌸 Tất cả</button>`;
+            let html = `<div class="dropdown-item active" onclick="filterByCategory('Tất cả', this)">🌸 Tất cả</div>`;
             categories.forEach(cat => {
-                html += `<button class="cat-btn" onclick="filterByCategory('${cat}', this)">${cat}</button>`;
+                html += `<div class="dropdown-item" onclick="filterByCategory('${cat}', this)">${cat}</div>`;
             });
             
-            filterContainer.innerHTML = html;
+            dropdown.innerHTML = html;
         }
 
-        // Lọc hiển thị khi bấm vào Nút danh mục
-        function filterByCategory(categoryName, btnElement) {
-            // Đổi màu nút được chọn
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
+        /* LỌC KHI CHỌN TỪ MENU */
+        function filterByCategory(categoryName, itemElement) {
+            // Đổi màu item đang chọn trong menu
+            document.querySelectorAll('.dropdown-item').forEach(b => b.classList.remove('active'));
+            itemElement.classList.add('active');
             
-            // Gọi hàm render
+            // Đổi tên ngoài nút Lọc
+            const icon = categoryName === "Tất cả" ? "🌸" : "🔍";
+            document.getElementById('filter-text').innerText = `${icon} Lọc: ${categoryName}`;
+
+            // Đóng menu lại
+            document.getElementById("filter-dropdown").classList.remove("show");
+            
             renderReviews(categoryName);
         }
 
-        // Hiển thị danh sách review ra màn hình
+        /* HIỂN THỊ CÓ HÌNH ẢNH (TỪ CỘT H - row[7]) */
         function renderReviews(categoryName) {
             const reviewContainer = document.getElementById('review-list');
             
-            // Lọc dữ liệu
             const filteredData = allReviewsData.filter(row => {
                 if (categoryName === "Tất cả") return true;
                 const rowCat = row[6] ? row[6].trim() : "";
@@ -611,15 +545,21 @@
                 return;
             }
 
-            // In ra các thẻ gập mở
             reviewContainer.innerHTML = filteredData.map(row => {
                 let shopeeBtn = row[3] ? `<a href="${row[3]}" class="btn-shop btn-shopee" target="_blank">🛒 Shopee</a>` : '';
                 let lazadaBtn = row[4] ? `<a href="${row[4]}" class="btn-shop btn-lazada" target="_blank">💙 Lazada</a>` : '';
                 let tiktokBtn = row[5] ? `<a href="${row[5]}" class="btn-shop btn-tiktok" target="_blank">🎵 TikTok</a>` : '';
                 
+                // Kiểm tra Cột thứ 8 (row[7]) có link ảnh không
+                let imageHtml = '';
+                if (row[7] && row[7].trim() !== '') {
+                    imageHtml = `<img src="${row[7].trim()}" alt="Ảnh sản phẩm" class="review-img" loading="lazy">`;
+                }
+                
                 return `<details class="review-card">
                     <summary class="review-title">${getRandomIcon()} ${row[1]}</summary>
                     <div class="review-body">
+                        ${imageHtml}
                         <div class="review-content">${row[2]}</div>
                         <div class="shop-buttons">
                             ${shopeeBtn}
@@ -631,7 +571,6 @@
             }).join('');
         }
 
-        // Gọi API khi load xong trang
         document.addEventListener("DOMContentLoaded", loadData);
     </script>
 </body>
