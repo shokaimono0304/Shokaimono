@@ -104,12 +104,12 @@
         .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
         .date-lunar { font-size: 11px; color: var(--border-color); }
 
-        /* === BOX TỪ VỰNG TIẾNG NHẬT === */
+        /* === BOX TỪ VỰNG TIẾNG NHẬT TÙY CHỈNH MỚI === */
         .vocab-block {
             background: #fff; border: 3px solid var(--border-color);
-            border-radius: 12px; padding: 5px; display: flex; align-items: center;
+            border-radius: 12px; padding: 8px 5px; display: flex; align-items: center;
             box-shadow: 3px 3px 0px var(--shadow-color); margin-top: 2px;
-            width: 155px; justify-content: space-between; user-select: none;
+            width: 185px; justify-content: space-between; user-select: none;
         }
         .vocab-btn {
             cursor: pointer; padding: 5px; font-size: 12px; color: var(--border-color); 
@@ -117,10 +117,25 @@
             border: 2px solid var(--border-color);
         }
         .vocab-btn:active { transform: scale(0.9); }
-        .vocab-content { text-align: center; flex: 1; padding: 0 4px; }
-        .vocab-label { font-size: 9px; font-weight: 900; color: var(--text-title); text-transform: uppercase; margin-bottom: 2px; }
-        .vocab-word { font-size: 12px; font-weight: 900; color: #0984e3; line-height: 1.2; }
-        .vocab-mean { font-size: 10px; font-weight: 700; color: var(--border-color); margin-top: 2px; }
+        .vocab-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+        
+        .vocab-content { text-align: center; flex: 1; padding: 0 4px; display: flex; flex-direction: column; gap: 2px; }
+        .vocab-label { font-size: 10px; font-weight: 900; color: var(--text-title); text-transform: uppercase; border-bottom: 2px dashed var(--btn-pink); padding-bottom: 4px; margin-bottom: 2px; }
+        
+        /* Chữ Kanji chính */
+        .vocab-word { font-size: 20px; font-weight: 900; color: var(--border-color); line-height: 1.1; }
+        
+        /* Phiên âm */
+        .vocab-furi { font-size: 11px; font-weight: 800; color: #d63031; }
+        
+        /* Nghĩa Tiếng Việt */
+        .vocab-mean { font-size: 13px; font-weight: 800; color: #0984e3; margin-bottom: 2px; }
+        
+        /* Cụm từ */
+        .vocab-phrase { font-size: 11px; font-weight: 800; color: var(--border-color); background: var(--btn-yellow); border-radius: 6px; padding: 3px 6px; display: inline-block; border: 1px solid var(--border-color); margin: 0 auto; }
+        
+        /* Nghĩa cụm từ */
+        .vocab-pmean { font-size: 11px; font-weight: 700; color: var(--border-color); line-height: 1.3;}
 
         /* --- SIDEBAR MENU --- */
         .sidebar {
@@ -316,10 +331,13 @@
                 <div class="vocab-btn" onclick="changeVocab(-1)">◀</div>
                 <div class="vocab-content">
                     <div class="vocab-label" id="vocab-label">Hôm nay</div>
-                    <div class="vocab-word" id="vocab-word">桜 (Sakura)</div>
+                    <div class="vocab-word" id="vocab-word">桜</div>
+                    <div class="vocab-furi" id="vocab-furi">さくら (Sakura)</div>
                     <div class="vocab-mean" id="vocab-mean">Hoa anh đào</div>
+                    <div class="vocab-phrase" id="vocab-phrase">桜が咲く</div>
+                    <div class="vocab-pmean" id="vocab-pmean">Hoa anh đào nở</div>
                 </div>
-                <div class="vocab-btn" onclick="changeVocab(1)">▶</div>
+                <div class="vocab-btn" id="vocab-next-btn" onclick="changeVocab(1)">▶</div>
             </div>
             
         </div>
@@ -367,34 +385,34 @@
            TỪ VỰNG TIẾNG NHẬT MỖI NGÀY
         ========================================= */
         const vocabList = [
-            { w: "桜 (Sakura)", m: "Hoa anh đào" },
-            { w: "猫 (Neko)", m: "Con mèo" },
-            { w: "海 (Umi)", m: "Bãi biển" },
-            { w: "空 (Sora)", m: "Bầu trời" },
-            { w: "星 (Hoshi)", m: "Ngôi sao" },
-            { w: "月 (Tsuki)", m: "Mặt trăng" },
-            { w: "太陽 (Taiyou)", m: "Mặt trời" },
-            { w: "水 (Mizu)", m: "Nước trong veo" },
-            { w: "風 (Kaze)", m: "Làn gió" },
-            { w: "雪 (Yuki)", m: "Tuyết rơi" },
-            { w: "春 (Haru)", m: "Mùa xuân" },
-            { w: "夏 (Natsu)", m: "Mùa hè" },
-            { w: "秋 (Aki)", m: "Mùa thu" },
-            { w: "冬 (Fuyu)", m: "Mùa đông" },
-            { w: "愛 (Ai)", m: "Tình yêu" },
-            { w: "夢 (Yume)", m: "Giấc mơ" },
-            { w: "笑顔 (Egao)", m: "Nụ cười" },
-            { w: "希望 (Kibou)", m: "Sự hy vọng" },
-            { w: "家族 (Kazoku)", m: "Gia đình" },
-            { w: "友達 (Tomodachi)", m: "Bạn bè" },
-            { w: "時間 (Jikan)", m: "Thời gian" },
-            { w: "未来 (Mirai)", m: "Tương lai" },
-            { w: "平和 (Heiwa)", m: "Hòa bình" },
-            { w: "森 (Mori)", m: "Khu rừng" },
-            { w: "花 (Hana)", m: "Bông hoa" }
+            { w: "桜", f: "さくら (Sakura)", m: "Hoa anh đào", p: "桜が咲く", pm: "Hoa anh đào nở" },
+            { w: "猫", f: "ねこ (Neko)", m: "Con mèo", p: "可愛い猫", pm: "Con mèo dễ thương" },
+            { w: "海", f: "うみ (Umi)", m: "Bãi biển", p: "海で泳ぐ", pm: "Bơi ở biển" },
+            { w: "空", f: "そら (Sora)", m: "Bầu trời", p: "空が青い", pm: "Bầu trời xanh" },
+            { w: "星", f: "ほし (Hoshi)", m: "Ngôi sao", p: "星が輝く", pm: "Sao lấp lánh" },
+            { w: "月", f: "つき (Tsuki)", m: "Mặt trăng", p: "満月", pm: "Trăng rằm" },
+            { w: "太陽", f: "たいよう (Taiyou)", m: "Mặt trời", p: "太陽の光", pm: "Ánh sáng mặt trời" },
+            { w: "水", f: "みず (Mizu)", m: "Nước", p: "水を飲む", pm: "Uống nước" },
+            { w: "風", f: "かぜ (Kaze)", m: "Làn gió", p: "強い風", pm: "Gió mạnh" },
+            { w: "雪", f: "ゆき (Yuki)", m: "Tuyết", p: "雪が降る", pm: "Tuyết rơi" },
+            { w: "春", f: "はる (Haru)", m: "Mùa xuân", p: "春が来る", pm: "Mùa xuân đến" },
+            { w: "夏", f: "なつ (Natsu)", m: "Mùa hè", p: "暑い夏", pm: "Mùa hè nóng bức" },
+            { w: "秋", f: "あき (Aki)", m: "Mùa thu", p: "秋の風", pm: "Gió mùa thu" },
+            { w: "冬", f: "ふゆ (Fuyu)", m: "Mùa đông", p: "寒い冬", pm: "Mùa đông lạnh" },
+            { w: "愛", f: "あい (Ai)", m: "Tình yêu", p: "愛してる", pm: "Anh yêu em" },
+            { w: "夢", f: "ゆめ (Yume)", m: "Giấc mơ", p: "夢を見る", pm: "Mơ một giấc mơ" },
+            { w: "笑顔", f: "えがお (Egao)", m: "Nụ cười", p: "素敵な笑顔", pm: "Nụ cười tuyệt vời" },
+            { w: "希望", f: "きぼう (Kibou)", m: "Sự hy vọng", p: "希望を持つ", pm: "Mang niềm hy vọng" },
+            { w: "家族", f: "かぞく (Kazoku)", m: "Gia đình", p: "大切な家族", pm: "Gia đình trân quý" },
+            { w: "友達", f: "ともだち (Tomodachi)", m: "Bạn bè", p: "親友", pm: "Bạn thân" },
+            { w: "時間", f: "じかん (Jikan)", m: "Thời gian", p: "時間を守る", pm: "Giữ đúng giờ" },
+            { w: "未来", f: "みらい (Mirai)", m: "Tương lai", p: "明るい未来", pm: "Tương lai tươi sáng" },
+            { w: "平和", f: "へいわ (Heiwa)", m: "Hòa bình", p: "平和な世界", pm: "Thế giới hòa bình" },
+            { w: "森", f: "もり (Mori)", m: "Khu rừng", p: "森の中", pm: "Trong khu rừng" },
+            { w: "花", f: "はな (Hana)", m: "Bông hoa", p: "花を飾る", pm: "Trang trí hoa" }
         ];
 
-        let vocabOffset = 0; // 0 = Hôm nay, -1 = Hôm qua, 1 = Ngày mai
+        let vocabOffset = 0; // 0 = Hôm nay, -1 = Hôm qua. Không cho số dương.
 
         function renderVocab() {
             const today = new Date();
@@ -404,23 +422,33 @@
             const baseTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
             const dayIndex = Math.floor(baseTime / (1000 * 60 * 60 * 24));
             
-            // Lấy từ vựng tương ứng (dùng % để lặp lại khi hết danh sách)
+            // Lấy từ vựng (dùng % để lặp lại danh sách)
             const wordObj = vocabList[dayIndex % vocabList.length];
 
             // Cập nhật nhãn thời gian
             let labelStr = "Hôm nay";
             if (vocabOffset === -1) labelStr = "Hôm qua";
             else if (vocabOffset === -2) labelStr = "Hôm kia";
-            else if (vocabOffset === 1) labelStr = "Ngày mai";
             else if (vocabOffset < -2) labelStr = Math.abs(vocabOffset) + " ngày trước";
-            else if (vocabOffset > 1) labelStr = vocabOffset + " ngày sau";
 
             document.getElementById('vocab-label').innerText = labelStr;
             document.getElementById('vocab-word').innerText = wordObj.w;
+            document.getElementById('vocab-furi').innerText = wordObj.f;
             document.getElementById('vocab-mean').innerText = wordObj.m;
+            document.getElementById('vocab-phrase').innerText = wordObj.p;
+            document.getElementById('vocab-pmean').innerText = wordObj.pm;
+
+            // Xử lý nút Next (Tương lai)
+            const nextBtn = document.getElementById('vocab-next-btn');
+            if (vocabOffset === 0) {
+                nextBtn.classList.add('disabled');
+            } else {
+                nextBtn.classList.remove('disabled');
+            }
         }
 
         function changeVocab(delta) {
+            if (vocabOffset + delta > 0) return; // Chặn không cho tiến tới ngày mai
             vocabOffset += delta;
             renderVocab();
         }
