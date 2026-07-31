@@ -80,62 +80,74 @@
             background: linear-gradient(135deg, #ff9eb5 0%, #ff4b82 100%) !important;
         }
 
-        /* --- HEADER & MENU --- */
-        .header {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            padding: 15px 20px; background: transparent; position: relative; z-index: 100;
+        /* --- THANH NẰM NGANG (TOP NAV) --- */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            width: 100%;
+            position: relative;
+            z-index: 100;
         }
 
         .menu-btn {
-            font-size: 28px; cursor: pointer; color: var(--border-color); background: #fff;
+            font-size: 24px; cursor: pointer; color: var(--border-color); background: #fff;
             border: 3px solid var(--border-color); border-radius: 12px;
-            width: 45px; height: 45px; display: flex; justify-content: center; align-items: center;
-            box-shadow: 3px 3px 0px var(--shadow-color); transition: 0.1s;
+            width: 42px; height: 42px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 3px 3px 0px var(--shadow-color); transition: 0.1s; flex-shrink: 0;
         }
         .menu-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px var(--shadow-color); }
 
-        .datetime-box { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-        .time-block, .date-block {
-            background: #fff; border: 3px solid var(--border-color);
-            border-radius: 12px; padding: 4px 12px;
+        .title-wrapper { 
+            flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; 
+            margin: 0 10px; min-width: 0;
+        }
+        h1 { 
+            font-size: clamp(14px, 4vw, 22px); font-weight: 900; text-align: center; text-transform: uppercase; color: var(--text-title);
+            background: var(--btn-pink); border: 3px solid var(--border-color); border-radius: 16px;
+            padding: 10px 5px; box-shadow: 4px 4px 0px var(--shadow-color); margin: 0; width: 100%; max-width: 350px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .tab-indicator {
+            display: inline-block; background: var(--btn-yellow); border: 3px solid var(--border-color);
+            border-radius: 20px; padding: 4px 16px; font-size: 12px; font-weight: 900; color: var(--border-color);
+            box-shadow: 2px 2px 0px var(--shadow-color); text-transform: uppercase;
+        }
+
+        .datetime-box { 
+            display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; width: 145px; 
+        }
+        
+        /* Cả 3 khối Thời Gian - Ngày - Từ Vựng đều bằng nhau 100% width */
+        .time-block, .date-block, .vocab-block {
+            background: #fff; border: 3px solid var(--border-color); width: 100%;
+            border-radius: 12px; padding: 4px 0;
             box-shadow: 3px 3px 0px var(--shadow-color); text-align: center;
         }
         .time-block { color: var(--text-title); font-weight: 900; font-size: 16px; background: var(--btn-pink); }
-        .date-block { font-size: 12px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
-        .date-lunar { font-size: 11px; color: var(--border-color); }
+        .date-block { font-size: 11px; font-weight: 800; color: #0984e3; background: var(--btn-blue); line-height: 1.4; }
+        .date-lunar { font-size: 10px; color: var(--border-color); }
 
-        /* === BOX TỪ VỰNG TIẾNG NHẬT TÙY CHỈNH MỚI === */
+        /* === BOX TỪ VỰNG === */
         .vocab-block {
-            background: #fff; border: 3px solid var(--border-color);
-            border-radius: 12px; padding: 8px 5px; display: flex; align-items: center;
-            box-shadow: 3px 3px 0px var(--shadow-color); margin-top: 2px;
-            width: 185px; justify-content: space-between; user-select: none;
+            padding: 6px 4px; display: flex; align-items: center; justify-content: space-between; user-select: none;
         }
         .vocab-btn {
-            cursor: pointer; padding: 5px; font-size: 12px; color: var(--border-color); 
+            cursor: pointer; padding: 4px; font-size: 12px; color: var(--border-color); 
             font-weight: 900; transition: 0.1s; background: var(--btn-yellow); border-radius: 8px;
             border: 2px solid var(--border-color);
         }
         .vocab-btn:active { transform: scale(0.9); }
         .vocab-btn.disabled { opacity: 0.3; cursor: not-allowed; }
         
-        .vocab-content { text-align: center; flex: 1; padding: 0 4px; display: flex; flex-direction: column; gap: 2px; }
-        .vocab-label { font-size: 10px; font-weight: 900; color: var(--text-title); text-transform: uppercase; border-bottom: 2px dashed var(--btn-pink); padding-bottom: 4px; margin-bottom: 2px; }
-        
-        /* Chữ Kanji chính */
-        .vocab-word { font-size: 20px; font-weight: 900; color: var(--border-color); line-height: 1.1; }
-        
-        /* Phiên âm */
-        .vocab-furi { font-size: 11px; font-weight: 800; color: #d63031; }
-        
-        /* Nghĩa Tiếng Việt */
-        .vocab-mean { font-size: 13px; font-weight: 800; color: #0984e3; margin-bottom: 2px; }
-        
-        /* Cụm từ */
-        .vocab-phrase { font-size: 11px; font-weight: 800; color: var(--border-color); background: var(--btn-yellow); border-radius: 6px; padding: 3px 6px; display: inline-block; border: 1px solid var(--border-color); margin: 0 auto; }
-        
-        /* Nghĩa cụm từ */
-        .vocab-pmean { font-size: 11px; font-weight: 700; color: var(--border-color); line-height: 1.3;}
+        .vocab-content { text-align: center; flex: 1; padding: 0 2px; display: flex; flex-direction: column; gap: 2px; }
+        .vocab-label { font-size: 9px; font-weight: 900; color: var(--text-title); text-transform: uppercase; border-bottom: 2px dashed var(--btn-pink); padding-bottom: 3px; margin-bottom: 2px; }
+        .vocab-word { font-size: 18px; font-weight: 900; color: var(--border-color); line-height: 1.1; }
+        .vocab-furi { font-size: 10px; font-weight: 800; color: #d63031; }
+        .vocab-mean { font-size: 12px; font-weight: 800; color: #0984e3; margin-bottom: 2px; }
+        .vocab-phrase { font-size: 10px; font-weight: 800; color: var(--border-color); background: var(--btn-yellow); border-radius: 6px; padding: 3px 4px; display: inline-block; border: 1px solid var(--border-color); margin: 0 auto; line-height: 1.2;}
+        .vocab-pmean { font-size: 10px; font-weight: 700; color: var(--border-color); line-height: 1.3;}
 
         /* --- SIDEBAR MENU --- */
         .sidebar {
@@ -158,20 +170,8 @@
 
         /* --- CONTAINER CHÍNH --- */
         .container { 
-            width: 100%; max-width: 400px; margin: auto; padding: 10px 20px 80px 20px;
+            width: 100%; max-width: 400px; margin: auto; padding: 5px 20px 80px 20px;
             position: relative; z-index: 10;
-        }
-
-        .title-wrapper { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        h1 { 
-            font-size: 24px; font-weight: 900; text-align: center; text-transform: uppercase; color: var(--text-title);
-            background: var(--btn-pink); border: 3px solid var(--border-color); border-radius: 16px;
-            padding: 15px 20px; box-shadow: 4px 4px 0px var(--shadow-color); margin: 0; width: 100%;
-        }
-        .tab-indicator {
-            display: inline-block; background: var(--btn-yellow); border: 3px solid var(--border-color);
-            border-radius: 20px; padding: 4px 16px; font-size: 13px; font-weight: 900; color: var(--border-color);
-            box-shadow: 2px 2px 0px var(--shadow-color); text-transform: uppercase;
         }
 
         .tab-content { display: none; }
@@ -317,16 +317,26 @@
         <a href="javascript:void(0)" onclick="openTab('tab-reviews', this)" class="menu-item">🍡 Góc Review</a>
     </div>
 
-    <div class="header">
+    <!-- TẤT CẢ MENU, TITLE VÀ BOX TỪ VỰNG CHUNG 1 HÀNG (NGANG BẰNG & SÁT LỀ 2 BÊN) -->
+    <div class="top-nav">
+        <!-- Nút Menu sát mép trái -->
         <div class="menu-btn" onclick="openMenu()">☰</div>
+        
+        <!-- Chữ Shokaimono nằm ngay giữa, trên cùng trục ngang -->
+        <div class="title-wrapper">
+            <h1>🌸 Shokaimono 🌸</h1>
+            <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
+        </div>
+        
+        <!-- Cụm Ngày Giờ Từ Vựng sát mép phải, 3 ô to bằng nhau chằn chặn -->
         <div class="datetime-box">
             <div class="time-block" id="clock-time">--:--:--</div>
+            
             <div class="date-block">
                 <div id="clock-date-solar">Thứ... <br>Dương: ...</div>
                 <div class="date-lunar" id="clock-date-lunar">(Âm: ...)</div>
             </div>
             
-            <!-- GÓC TỪ VỰNG TIẾNG NHẬT -->
             <div class="vocab-block">
                 <div class="vocab-btn" onclick="changeVocab(-1)">◀</div>
                 <div class="vocab-content">
@@ -339,16 +349,11 @@
                 </div>
                 <div class="vocab-btn" id="vocab-next-btn" onclick="changeVocab(1)">▶</div>
             </div>
-            
         </div>
     </div>
 
+    <!-- KHUNG CHỨA NỘI DUNG (CHỈ CÒN TABS BÊN TRONG) -->
     <div class="container">
-        <div class="title-wrapper">
-            <h1>🌸 Shokaimono 🌸</h1>
-            <div id="current-tab-title" class="tab-indicator">🌸 Mạng Xã Hội</div>
-        </div>
-        
         <div id="tab-bio" class="tab-content active">
             <div id="bio-list">
                 <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
@@ -412,20 +417,18 @@
             { w: "花", f: "はな (Hana)", m: "Bông hoa", p: "花を飾る", pm: "Trang trí hoa" }
         ];
 
-        let vocabOffset = 0; // 0 = Hôm nay, -1 = Hôm qua. Không cho số dương.
+        let vocabOffset = 0; // 0 = Hôm nay, -1 = Hôm qua
 
         function renderVocab() {
             const today = new Date();
             today.setDate(today.getDate() + vocabOffset);
             
-            // Tính số thứ tự ngày cố định để mỗi ngày luôn ra đúng 1 từ đó
             const baseTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
             const dayIndex = Math.floor(baseTime / (1000 * 60 * 60 * 24));
             
-            // Lấy từ vựng (dùng % để lặp lại danh sách)
             const wordObj = vocabList[dayIndex % vocabList.length];
 
-            // Cập nhật nhãn thời gian: Hôm nay, Hôm qua, hoặc Ngày Tháng Năm
+            // Cập nhật nhãn thời gian
             let labelStr = "Hôm nay";
             if (vocabOffset === -1) {
                 labelStr = "Hôm qua";
@@ -443,7 +446,6 @@
             document.getElementById('vocab-phrase').innerText = wordObj.p;
             document.getElementById('vocab-pmean').innerText = wordObj.pm;
 
-            // Xử lý nút Next (Tương lai)
             const nextBtn = document.getElementById('vocab-next-btn');
             if (vocabOffset === 0) {
                 nextBtn.classList.add('disabled');
@@ -453,13 +455,87 @@
         }
 
         function changeVocab(delta) {
-            if (vocabOffset + delta > 0) return; // Chặn không cho tiến tới ngày mai
+            if (vocabOffset + delta > 0) return;
             vocabOffset += delta;
             renderVocab();
         }
         
-        // Chạy lần đầu để load từ vựng hôm nay
         renderVocab();
+
+
+        /* =========================================
+           ĐỒNG HỒ & GIAO DIỆN
+        ========================================= */
+        function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
+        function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
+        function openTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            btnElement.classList.add('active');
+            document.getElementById('current-tab-title').innerText = btnElement.innerText;
+            closeMenu();
+        }
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
+            const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${days[now.getDay()]}</span><br>Dương: ${now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
+            try {
+                let rawLunar = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' }).format(now); 
+                let lunarParts = rawLunar.split(/[\/\-.]/);
+                document.getElementById('clock-date-lunar').innerText = `(Âm: ${lunarParts[0]}/${lunarParts[1]})`;
+            } catch (e) { document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`; }
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
+        function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
+
+
+        /* =========================================
+           HIỆU ỨNG HOA RƠI
+        ========================================= */
+        function createSakura() {
+            const container = document.getElementById('bg-container');
+            const day = new Date().getDay(); 
+            let numPetals = 25; let speedMod = 1; let swayMod = 1; let effectType = 'normal'; 
+            const themeEmojis = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
+            
+            if (day === 0) { numPetals = 15; speedMod = 1.5; } else if (day === 1) { numPetals = 35; speedMod = 0.6; } 
+            else if (day === 2) { numPetals = 25; swayMod = 0.4; } else if (day === 3) { numPetals = 40; speedMod = 0.8; effectType = 'rain'; } 
+            else if (day === 4) { numPetals = 25; effectType = 'reverse'; } else if (day === 5) { numPetals = 20; effectType = 'glow'; } 
+            else if (day === 6) { numPetals = 25; effectType = 'emoji'; }
+
+            for (let i = 0; i < numPetals; i++) {
+                let petal = document.createElement('div'); petal.classList.add('petal');
+                let size = Math.random() * 8 + 6;
+                if (day === 0) size += 4; if (effectType === 'rain') size -= 2; 
+
+                if (effectType === 'emoji') {
+                    petal.innerText = themeEmojis[Math.floor(Math.random() * themeEmojis.length)];
+                    petal.style.background = 'transparent'; petal.style.boxShadow = 'none'; petal.style.fontSize = (size + 12) + 'px'; 
+                    petal.style.display = 'flex'; petal.style.alignItems = 'center'; petal.style.justifyContent = 'center';
+                } else {
+                    petal.style.width = size + 'px'; petal.style.height = (size + 3) + 'px';
+                }
+
+                if (effectType === 'glow') petal.classList.add('glow-petal');
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationName = `${effectType === 'reverse' ? 'fall-reverse' : 'fall'}, ${effectType === 'rain' ? 'sway-rain' : 'sway'}`;
+                petal.style.animationDuration = (Math.random() * 5 * speedMod + 5 * speedMod) + 's, ' + (Math.random() * 3 * swayMod + 2 * swayMod) + 's';
+                petal.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 10) + 's';
+                container.appendChild(petal);
+            }
+        }
+        createSakura();
+
+        window.onscroll = function() {
+            let btn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
+        };
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 
         /* =========================================
@@ -584,77 +660,6 @@
         lightboxImg.addEventListener('touchend', (e) => {
             if (e.touches.length < 2) { initialDistance = null; }
         });
-
-
-        /* =========================================
-           HIỆU ỨNG HOA RƠI & GIAO DIỆN CHUNG
-        ========================================= */
-        function createSakura() {
-            const container = document.getElementById('bg-container');
-            const day = new Date().getDay(); 
-            let numPetals = 25; let speedMod = 1; let swayMod = 1; let effectType = 'normal'; 
-            const themeEmojis = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
-            
-            if (day === 0) { numPetals = 15; speedMod = 1.5; } else if (day === 1) { numPetals = 35; speedMod = 0.6; } 
-            else if (day === 2) { numPetals = 25; swayMod = 0.4; } else if (day === 3) { numPetals = 40; speedMod = 0.8; effectType = 'rain'; } 
-            else if (day === 4) { numPetals = 25; effectType = 'reverse'; } else if (day === 5) { numPetals = 20; effectType = 'glow'; } 
-            else if (day === 6) { numPetals = 25; effectType = 'emoji'; }
-
-            for (let i = 0; i < numPetals; i++) {
-                let petal = document.createElement('div'); petal.classList.add('petal');
-                let size = Math.random() * 8 + 6;
-                if (day === 0) size += 4; if (effectType === 'rain') size -= 2; 
-
-                if (effectType === 'emoji') {
-                    petal.innerText = themeEmojis[Math.floor(Math.random() * themeEmojis.length)];
-                    petal.style.background = 'transparent'; petal.style.boxShadow = 'none'; petal.style.fontSize = (size + 12) + 'px'; 
-                    petal.style.display = 'flex'; petal.style.alignItems = 'center'; petal.style.justifyContent = 'center';
-                } else {
-                    petal.style.width = size + 'px'; petal.style.height = (size + 3) + 'px';
-                }
-
-                if (effectType === 'glow') petal.classList.add('glow-petal');
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.animationName = `${effectType === 'reverse' ? 'fall-reverse' : 'fall'}, ${effectType === 'rain' ? 'sway-rain' : 'sway'}`;
-                petal.style.animationDuration = (Math.random() * 5 * speedMod + 5 * speedMod) + 's, ' + (Math.random() * 3 * swayMod + 2 * swayMod) + 's';
-                petal.style.animationDelay = (Math.random() * 10) + 's, ' + (Math.random() * 10) + 's';
-                container.appendChild(petal);
-            }
-        }
-        createSakura();
-
-        window.onscroll = function() {
-            let btn = document.getElementById("scrollTopBtn");
-            if (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
-        };
-        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-
-        function openMenu() { document.getElementById("mySidebar").style.width = "260px"; }
-        function closeMenu() { document.getElementById("mySidebar").style.width = "0"; }
-        function openTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            btnElement.classList.add('active');
-            document.getElementById('current-tab-title').innerText = btnElement.innerText;
-            closeMenu();
-        }
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
-            const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-            document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${days[now.getDay()]}</span><br>Dương: ${now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })}`;
-            try {
-                let rawLunar = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' }).format(now); 
-                let lunarParts = rawLunar.split(/[\/\-.]/);
-                document.getElementById('clock-date-lunar').innerText = `(Âm: ${lunarParts[0]}/${lunarParts[1]})`;
-            } catch (e) { document.getElementById('clock-date-lunar').innerText = `(Âm: N/A)`; }
-        }
-        setInterval(updateClock, 1000); updateClock();
-
-        const listIcons = ['🌸', '💮', '🌺', '🏵️', '🌷', '🍡', '🎐', '🍵', '🎀'];
-        function getRandomIcon() { return listIcons[Math.floor(Math.random() * listIcons.length)]; }
 
 
         /* =========================================
