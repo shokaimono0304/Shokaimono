@@ -33,13 +33,17 @@
         }
 
         body { 
-            /* Đã cập nhật áp dụng font Nunito cho toàn trang */
             font-family: 'Nunito', sans-serif;
             background: var(--bg-main);
             color: var(--text-main); 
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
+        }
+
+        /* Bắt buộc các thẻ input, button kế thừa font chữ của body để không bị lỗi font Tiếng Việt */
+        button, input, select, textarea {
+            font-family: inherit;
         }
 
         /* --- BACKGROUND HOA ANH ĐÀO RƠI --- */
@@ -355,7 +359,7 @@
         <div class="datetime-box">
             <div class="time-block" id="clock-time">--:--:--</div>
             <div class="date-block">
-                <div id="clock-date-solar">Dương: ...</div>
+                <div id="clock-date-solar">Thứ... <br>Dương: ...</div>
                 <div class="date-lunar" id="clock-date-lunar">(Âm: ...)</div>
             </div>
         </div>
@@ -471,14 +475,22 @@
             closeMenu();
         }
 
-        /* ĐỒNG HỒ & CẮT CHUẨN NGÀY ÂM */
+        /* ĐỒNG HỒ & CẮT CHUẨN NGÀY ÂM - ĐÃ THÊM THỨ */
         function updateClock() {
             const now = new Date();
             document.getElementById('clock-time').innerText = now.toLocaleTimeString('vi-VN', { hour12: false });
             
+            // Xử lý lấy tên Thứ
+            const days = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+            const dayName = days[now.getDay()];
+
+            // Xử lý Ngày dương
             const dateSolar = now.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            document.getElementById('clock-date-solar').innerText = `${dateSolar}`;
             
+            // Xuất ra HTML (Thứ màu nổi hơn chút và xuống dòng Ngày dương)
+            document.getElementById('clock-date-solar').innerHTML = `<span style="color: var(--text-title); font-size: 13px;">${dayName}</span><br>Dương: ${dateSolar}`;
+            
+            // Xử lý Ngày âm
             try {
                 const formatter = new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', calendar: 'chinese' });
                 let rawLunar = formatter.format(now);
